@@ -101,7 +101,7 @@ function generate_schedule(user, date) {
         var generatedEvents = [];
         Promise.all([generate_schedule_from_daily(user, date), generate_schedule_from_weekly(user, date)]).then(function (events) {
             generatedEvents = generatedEvents.concat(events[0], events[1]);
-            if (events.length > 0) {
+            if (generatedEvents.length > 0) {
                 return Promise.all([set_generated_day(user, date), set_events(generatedEvents)]);
             } else {
                 return set_generated_day(user, date);
