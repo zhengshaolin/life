@@ -9,8 +9,8 @@ var Life = angular.module('life', ['ngRoute']);
 // 登陆
 Life.controller('LoginController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
     $scope.login = function() {
-        $http({url: '../token', method: 'GET', responseType: 'json', params: {username: $scope.username, password: $scope.password}}).then(function (result) {
-            localStorage.token = result.token;
+        $http({url: '../token', method: 'GET', responseType: 'json', params: {username: $scope.username, password: $scope.password}}).then(function (response) {
+            localStorage.token = response.data.token;
             $location.path('/schedule/' + moment().format('YYYY-MM-DD'));
             $scope.$apply();
         }, function (err) {
