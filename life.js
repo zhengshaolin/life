@@ -48,13 +48,7 @@ function get_day(user, date) {
                 if (day) {
                     resolve(day);
                 } else {
-                    db.collection('days').insert({user: user, date: date, retrospect: ''}, function (err, day) {
-                        if (err) {
-                            reject('get_day failed, caused by: ' + err.toString())
-                        } else {
-                            resolve('');
-                        }
-                    });
+                    resolve('');
                 }
             }
         })
