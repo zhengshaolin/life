@@ -1,0 +1,51 @@
+<div>
+    <h2>{{user}}<br />{{date}}</h2>
+    <div class="navi"><a ng-href="#/plan/daily"><i class="fa fa-leaf"></i>&nbsp;TO DAILY</a></div>
+    <div class="navi"><a ng-href="#/plan/weekly"><i class="fa fa-leaf"></i>&nbsp;TO WEEKLY</a></div>
+</div>
+<p>
+    <h3>今天过得怎么样？</h3>
+</p>
+<div class="day_retrospect">
+    <textarea cols="160" rows="3" ng-model="retrospect" ng-change="setChanged(true)" placeholder="HAVE A NICE DAY!"></textarea>
+</div>
+<p>
+    <h3>今天的时间表</h3>
+</p>
+<div class="schedule">
+    <form>
+        <table border="0" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <th>TYPE</th>
+                    <th>TIME</th>
+                    <th>AFFAIR</th>
+                    <th>OBJECTIVE</th>
+                    <th>CHECKPOINTS</th>
+                    <th>COMPLETION</th>
+                    <th>RETROSPECT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="9"><button ng-click="insertEvent(-1)" class="new_event"><i class="fa fa-plus-square"></i></button></td>
+                </tr>
+                <tr ng-repeat-start="event in events" class="event_in_schedule">
+                    <td><input type="text" ng-model="event.type" class="event_type" placeholder="投资" ng-change="setChanged(true)"></td>
+                    <td><input type="text" ng-model="event.time" class="event_time" placeholder="1400" ng-change="setChanged(true)">/<input type="text" ng-model="event.duration" class="event_duration" placeholder="1.0"  ng-change="setChanged(true)"></td>
+                    <td><input type="text" ng-model="event.affair" class="event_affair" placeholder="运动去" ng-change="setChanged(true)"></td>
+                    <td><input type="text" ng-model="event.objective" class="event_objective" placeholder="锻炼身体" ng-change="setChanged(true)"></td>
+                    <td><input type="text" ng-model="event.checkpoint" class="event_checkpoint" placeholder="不偷懒，不过量" ng-change="setChanged(true)"></td>
+                    <td><input type="text" ng-model="event.completion" class="event_completion" placeholder="120" ng-change="setChanged(true)">%</td>
+                    <td><input type="text" ng-model="event.retrospect" class="event_retrospect" placeholder="跑超了！" ng-change="setChanged(true)"></td>
+                    <td><button ng-click="insertEvent($index)" class="new_event"><i class="fa fa-plus-square"></i></button></td>
+                    <td><button ng-disabled="event._id" ng-click="removeEvent($index)" class="forget"><i class="fa fa-archive"></i></button></td>
+                </tr>
+                <tr ng-repeat-end>
+                    <td colspan="9"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" ng-disabled="!changed" ng-click="save()" class="save"><i class="fa fa-floppy-o fa-lg"></i></button>
+    </form>
+</div>

@@ -1,0 +1,20 @@
+<div>
+    <h2>{Every day of LIFE}<br />{{user}}</h2>
+    <div class="navi"><a ng-href="#/plan/daily"><i class="fa fa-leaf"></i>&nbsp;TO DAILY</a></div>
+    <div class="navi"><a ng-href="#/schedule/{{today}}"><i class="fa fa-calendar"></i>&nbsp;TO SCHEDULE</a></div>
+</div>
+<div class="weekly_plan">
+    <button ng-disabled="!changed" ng-click="save()" class="save"><i class="fa fa-floppy-o"></i></button>
+    <div ng-repeat="(weekdayIndex, weekday) in weekdays">
+        <div>{{weekdayNames[weekdayIndex]}}<button ng-click="newEvent(weekdayIndex)" class="new_event"><i class="fa fa-plus-square"></i></button></div>
+        <div ng-repeat="(eventIndex, event) in weekday" class="event_in_plan">
+            <input type="text" ng-model="event.type" ng-change="setChanged(true)" class="event_type" placeholder="TYPE"/>
+            <input type="text" ng-model="event.time" ng-change="setChanged(true)" class="event_time" placeholder="WHEN"/>
+            <input type="text" ng-model="event.duration" ng-change="setChanged(true)" class="event_duration" placeholder="HOUR"/>
+            <input type="text" ng-model="event.affair" ng-change="setChanged(true)" class="event_affair" placeholder="WHAT TO DO"/>
+            <input type="text" ng-model="event.objective" ng-change="setChanged(true)" class="event_objective" placeholder="WHY DOING THAT"/>
+            <input type="text" ng-model="event.checkpoint" ng-change="setChanged(true)" class="event_checkpoint" placeholder="CHECKPOINTs"/>
+            <button ng-click="removeEvent(weekdayIndex, eventIndex)" class="forget"><i class="fa fa-archive"></i></button>
+        </div>
+    </div>
+</div>
