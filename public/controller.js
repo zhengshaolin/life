@@ -12,7 +12,6 @@ Life.controller('LoginController', ['$scope', '$location', '$http', function ($s
         $http({url: '../token', method: 'GET', responseType: 'json', params: {username: $scope.username, password: $scope.password}}).then(function (response) {
             localStorage.token = response.data.token;
             $location.path('/schedule/' + moment().format('YYYY-MM-DD'));
-            $scope.$apply();
         }, function (err) {
             console.log(err);
             alert(err.responseText);
