@@ -59,7 +59,7 @@ exports.get_day = get_day;
 
 function set_day(user, date, retrospect) {
     return new Promise(function (resolve, reject) {
-        db.collection('days').update({user: user, date: date}, {retrospect: retrospect}, function (err, day) {
+        db.collection('days').updateOne({user: user, date: date}, {retrospect: retrospect}, function (err, day) {
             if (err) {
                 reject('set_day failed, caused by: ' + err.toString());
             } else {
@@ -86,6 +86,9 @@ function get_schedule(user, date) {
                 return generate_schedule(user, date);
             }
         }).then(function (events) {
+            events.sort(function (event1, event2) {
+                return event1.time - event2.time;
+            });
             resolve(events);
         }).catch(function (err) {
             reject('get_schedule failed, caused by: ' + err.toString());
