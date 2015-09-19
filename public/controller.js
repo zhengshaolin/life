@@ -237,7 +237,12 @@ Life.controller('EnglishController', ['$scope', '$location', '$http', function (
             }
         });
 
-        console.log($scope.words[date]);
+        $http({url: '../words/' + date, method: 'PUT', responseType: 'json', data: $scope.words[date], headers: {token: $scope.token}}).then(function (response) {
+            alert('OK');
+        }, function (err) {
+            console.log(err);
+            alert(err.toString());
+        });
     }
 }]);
 

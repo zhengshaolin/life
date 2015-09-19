@@ -231,6 +231,21 @@ app.get('/words/:date', function (req, res) {
     });
 });
 
+// 更新某日单词
+app.put('/words/:date', function (req, res) {
+    let token = req.headers.token;
+    let date = req.params.date;
+
+    verify_token(token).then(function (user) {
+        return English.update_words(user, date, req.body);
+    }).then(function (result) {
+        res.json(result);
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500).end(err.toString());
+    });
+});
+
 // 查多日单词
 app.get('/words', function (req, res) {
     let token = req.headers.token;

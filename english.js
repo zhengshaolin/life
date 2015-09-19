@@ -81,3 +81,39 @@ function list_words(user, date) {
 }
 
 exports.list_words = list_words;
+
+function update_words(user, date, words) {
+    let promises = [];
+
+    words.first.forEach(function (word) {
+        word.user = user;
+        word.date = date;
+
+        promises.push(update_word(word));
+    });
+
+    words.revise.forEach(function (word) {
+        word.user = user;
+        word.date = date;
+
+        promises.push(update_word(word));
+    });
+
+    return Promise.all(promises);
+}
+
+exports.update_words = update_words;
+
+function update_word(word) {
+    return new Promise(function (resolve, reject) {
+        let id = word._id;
+        delete word._id;
+        db.collection('words').update({_id: ObjectID(id)}, word, function (err, result) {
+            if (err) {
+                reject('update_word failed, caused by: ' + err.toString());
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
