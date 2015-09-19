@@ -1,0 +1,45 @@
+<div>
+    <h2>{{user}}</h2>
+</div>
+<div>
+    <h3>最近{{dates.length}}天的单词表</h3>
+</div>
+<div class="words">
+    <div class="date" ng-repeat="date in dates">
+        <table>
+            <tbody>
+                <tr>
+                    <td>{{date}}<button ng-click="save(date)"><i class="fa fa-floppy-o"></i></button></td>
+                </tr>
+                <tr><td>NEW</td></tr>
+                <tr>
+                    <td>
+                        <div ng-repeat="word in words[date].first">
+                            <span>
+                                <i ng-if="word.completion" class="fa fa-calendar-check-o"></i>
+                                <i ng-if="!word.completion" class="fa fa-calendar-o"></i>
+                                {{word.word}}
+                            </span>
+                            <span ng-if="word.example">&nbsp;-&nbsp;</span>
+                            <span><input type="text" size="50" ng-model="word.example"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr><td>REVISE</td></tr>
+                <tr>
+                    <td>
+                        <div ng-repeat="word in words[date].revise">
+                            <span>
+                                <i ng-if="word.completion" class="fa fa-calendar-check-o"></i>
+                                <i ng-if="!word.completion" class="fa fa-calendar-o"></i>
+                                {{word.word}}
+                            </span>
+                            <span ng-if="word.example">&nbsp;-&nbsp;</span>
+                            <span><input type="text" size="50" ng-model="word.example"></span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
