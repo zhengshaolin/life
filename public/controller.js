@@ -20,7 +20,7 @@ Life.controller('LoginController', ['$scope', '$location', '$http', function ($s
 }]);
 
 // 展示日程
-Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$http', function ($scope, $routeParams, $location, $http) {
+Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$http', '$q', function ($scope, $routeParams, $location, $http, $q) {
     $scope.token = localStorage.token;
     if (!$scope.token) {
         $location.path('/login');
@@ -63,13 +63,12 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
     };
 
     $scope.save = function () {
-        $http({url: '../retrospect/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: {retrospect: $scope.retrospect}}).then(function (result) {
-        }, function (err) {
-            console.log(err);
-            alert(JSON.stringify(err));
-        });
+        var promises = [];
 
-        $http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: $scope.events}).then(function (result) {
+        promises.push($http({url: '../retrospect/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: {retrospect: $scope.retrospect}}));
+        promises.push($http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: $scope.events}));
+
+        $q.all(promises).then(function (responses) {
             $scope.changed = false;
         }, function (err) {
             console.log(err);
