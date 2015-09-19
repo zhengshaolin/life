@@ -186,6 +186,61 @@ Life.controller('WeeklyPlanController', ['$scope', '$location', '$http', functio
     };
 }]);
 
+Life.controller('EnglishController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
+    $scope.token = localStorage.token;
+    if (!$scope.token) {
+        $location.path('/login');
+        return;
+    }
+
+    $scope.user = $scope.token.split('-')[0];
+
+    $scope.today = moment();
+
+    $scope.dates = [];
+    $scope.dates.push($scope.today.format('YYYY-MM-DD'));
+    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
+    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
+    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
+    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
+    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
+    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
+
+    var datesQuery = $scope.dates.reduce(function (prev, curr, index, array) {
+        if (index == 0) {
+            return curr;
+        } else {
+            return prev + ',' + curr;
+        }
+    });
+
+    $http({url: '../words', method: 'GET', responseType: 'json', params: {dates: datesQuery}, headers: {token: $scope.token}}).then(function (response) {
+        $scope.words = response.data;
+    }, function (err) {
+        console.log(err);
+        alert(err.toString());
+    });
+
+    $scope.save = function (date) {
+        $scope.words[date].first.forEach(function (word) {
+            if (word.example) {
+                word.completion = true;
+            } else {
+                word.completion = false;
+            }
+        });
+        $scope.words[date].revise.forEach(function (word) {
+            if (word.example) {
+                word.completion = true;
+            } else {
+                word.completion = false;
+            }
+        });
+
+        console.log($scope.words[date]);
+    }
+}]);
+
 // 404
 Life.controller('MissingController', function () {
 });
@@ -203,6 +258,10 @@ Life.config(['$routeProvider', function ($routeProvider) {
         when('/plan/weekly', {
             controller: 'WeeklyPlanController',
             templateUrl: 'weekly_plan.html'
+        }).
+        when('/english', {
+            controller: 'EnglishController',
+            templateUrl: 'english.html'
         }).
         when('/login', {
             controller: 'LoginController',

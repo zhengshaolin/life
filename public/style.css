@@ -98,3 +98,12 @@ td {
 .event_in_schedule .event_retrospect {
     width: 200px;
 }
+.words .date {
+    float: left;
+    border: 1px solid #CCC;
+    margin: 10px;
+}
+.words input {
+    font-style: italic;
+    color: #999;
+}
