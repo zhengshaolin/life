@@ -11,7 +11,12 @@
                 <tr>
                     <td>{{date}}<button ng-click="save(date)"><i class="fa fa-floppy-o"></i></button></td>
                 </tr>
-                <tr><td>NEW</td></tr>
+                <tr>
+                    <td>
+                        <span>NEW</span>
+                        <span><input class="new" size="50" ng-model="newWords[date]" placeholder="put new words here"></span>
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         <div ng-repeat="word in words[date].first">
@@ -20,8 +25,8 @@
                                 <i ng-if="!word.completion" class="fa fa-calendar-o"></i>
                                 {{word.word}}
                             </span>
-                            <span ng-if="word.example">&nbsp;-&nbsp;</span>
-                            <span><input type="text" size="50" ng-model="word.example"></span>
+                            <span ng-if="word.example">-</span>
+                            <span><input class="example" type="text" size="50" ng-model="word.example"></span>
                         </div>
                     </td>
                 </tr>
@@ -34,8 +39,8 @@
                                 <i ng-if="!word.completion" class="fa fa-calendar-o"></i>
                                 {{word.word}}
                             </span>
-                            <span ng-if="word.example">&nbsp;-&nbsp;</span>
-                            <span><input type="text" size="50" ng-model="word.example"></span>
+                            <span ng-if="word.example">-</span>
+                            <span><input class="example" type="text" size="50" ng-model="word.example"></span>
                         </div>
                     </td>
                 </tr>

@@ -14,7 +14,7 @@ Life.controller('LoginController', ['$scope', '$location', '$http', function ($s
             $location.path('/schedule/' + moment().format('YYYY-MM-DD'));
         }, function (err) {
             console.log(err);
-            alert(err.responseText);
+            alert(JSON.stringify(err));
         });
     }
 }]);
@@ -37,7 +37,7 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
         $scope.retrospect = response.data.retrospect;
     }, function (err) {
         console.log(err);
-        alert(err.toString());
+        alert(JSON.stringify(err));
     });
 
     $http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'GET', headers: {token: $scope.token}}).then(function (response) {
@@ -45,7 +45,7 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
         console.log($scope.events);
     }, function (err) {
         console.log(err);
-        alert(err.toString());
+        alert(JSON.stringify(err));
     });
 
     $scope.setChanged = function (changed) {
@@ -66,14 +66,14 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
         $http({url: '../retrospect/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: {retrospect: $scope.retrospect}}).then(function (result) {
         }, function (err) {
             console.log(err);
-            alert(err.toString());
+            alert(JSON.stringify(err));
         });
 
         $http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: $scope.events}).then(function (result) {
             $scope.changed = false;
         }, function (err) {
             console.log(err);
-            alert(err.toString());
+            alert(JSON.stringify(err));
         });
     }
 }]);
@@ -98,7 +98,7 @@ Life.controller('DailyPlanController', ['$scope', '$location', '$http', function
         $scope.changed = false;
     }, function (err) {
         console.log(err);
-        alert(err.toString());
+        alert(JSON.stringify(err));
     });
 
     $scope.setChanged = function (changed) {
@@ -127,7 +127,7 @@ Life.controller('DailyPlanController', ['$scope', '$location', '$http', function
             $scope.changed = false;
         }, function (err) {
             console.log(err);
-            alert(err.toString());
+            alert(JSON.stringify(err));
         });
     };
 }]);
@@ -152,7 +152,7 @@ Life.controller('WeeklyPlanController', ['$scope', '$location', '$http', functio
         $scope.changed = false;
     }, function (err) {
         console.log(err);
-        alert(err.toString());
+        alert(JSON.stringify(err));
     });
 
     $scope.setChanged = function (changed) {
@@ -181,12 +181,12 @@ Life.controller('WeeklyPlanController', ['$scope', '$location', '$http', functio
             $scope.changed = false;
         }, function (err) {
             console.log(err);
-            alert(err.toString());
+            alert(JSON.stringify(err));
         });
     };
 }]);
 
-Life.controller('EnglishController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
+Life.controller('EnglishController', ['$scope', '$location', '$http', '$q', function ($scope, $location, $http, $q) {
     $scope.token = localStorage.token;
     if (!$scope.token) {
         $location.path('/login');
@@ -206,7 +206,9 @@ Life.controller('EnglishController', ['$scope', '$location', '$http', function (
     $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
     $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
 
-    var datesQuery = $scope.dates.reduce(function (prev, curr, index, array) {
+    $scope.newWords = {};
+
+    $scope.datesQuery = $scope.dates.reduce(function (prev, curr, index, array) {
         if (index == 0) {
             return curr;
         } else {
@@ -214,11 +216,11 @@ Life.controller('EnglishController', ['$scope', '$location', '$http', function (
         }
     });
 
-    $http({url: '../words', method: 'GET', responseType: 'json', params: {dates: datesQuery}, headers: {token: $scope.token}}).then(function (response) {
+    $http({url: '../words', method: 'GET', responseType: 'json', params: {dates: $scope.datesQuery}, headers: {token: $scope.token}}).then(function (response) {
         $scope.words = response.data;
     }, function (err) {
         console.log(err);
-        alert(err.toString());
+        alert(JSON.stringify(err));
     });
 
     $scope.save = function (date) {
@@ -237,11 +239,28 @@ Life.controller('EnglishController', ['$scope', '$location', '$http', function (
             }
         });
 
-        $http({url: '../words/' + date, method: 'PUT', responseType: 'json', data: $scope.words[date], headers: {token: $scope.token}}).then(function (response) {
-            alert('OK');
+        var promises = [];
+
+        if ($scope.newWords[date]) {
+            var newWords = $scope.newWords[date].split(',').map(function (word) {
+                return word.trim();
+            });
+
+            var postNewWords = $http({url: '../words/' + date, method: 'POST', responseType: 'json', data: newWords, headers: {token: $scope.token}});
+            promises.push(postNewWords);
+        }
+
+        var updateWords = $http({url: '../words/' + date, method: 'PUT', responseType: 'json', data: $scope.words[date], headers: {token: $scope.token}});
+        promises.push(updateWords);
+
+        $q.all(promises).then(function (responses) {
+            return $http({url: '../words', method: 'GET', responseType: 'json', params: {dates: $scope.datesQuery}, headers: {token: $scope.token}});
         }, function (err) {
             console.log(err);
-            alert(err.toString());
+            alert(JSON.stringify(err));
+        }).then(function (response) {
+            $scope.newWords = {};
+            $scope.words = response.data;
         });
     }
 }]);
