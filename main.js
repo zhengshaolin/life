@@ -52,6 +52,7 @@ var Mongodb = require('mongodb');
 var ObjectID = require('mongodb').ObjectID;
 
 var Life = require('./life.js');
+var English = require('./english.js');
 
 var server = new Mongodb.Server('127.0.0.1', 27017, {auto_reconnect: true});
 var database = new Mongodb.Db('life', server, {safe: true});
@@ -61,6 +62,7 @@ database.open(function (err, mongo) {
         console.log('life database connected');
         db = mongo;
         Life.bind_db(mongo);
+        English.bind_db(mongo);
     } else {
         console.log('life database unreachable: ' + err);
     }
@@ -193,6 +195,36 @@ app.put('/plan/daily', function (req, res) {
         return Life.set_daily_plan(user, req.body);
     }).then(function (result) {
         res.json(result);
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500).end(err.toString());
+    });
+});
+
+// 新增单词
+app.post('/words/:date', function (req, res) {
+    let token = req.headers.token;
+    let date = req.params.date;
+
+    verify_token(token).then(function (user) {
+        return English.add_words(user, req.body, date);
+    }).then(function (result) {
+        res.json(result);
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500).end(err.toString());
+    });
+});
+
+// 查某日单词
+app.get('/words/:date', function (req, res) {
+    let token = req.headers.token;
+    let date = req.params.date;
+
+    verify_token(token).then(function (user) {
+        return English.list_words(user, date);
+    }).then(function (words) {
+        res.json(words);
     }).catch(function (err) {
         console.log(err);
         res.status(500).end(err.toString());
