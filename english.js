@@ -42,7 +42,7 @@ function insert_word(word) {
 	});
 }
 
-function add_word(user, word, date) {
+function add_word(user, date, word) {
     let first = new Date(date);
     let word1 = {user: user, word: word, date: moment(first).format('YYYY-MM-DD'), memory: 1, example: '', completion: false};
     let word2 = {user: user, word: word, date: moment(first).format('YYYY-MM-DD'), memory: 2, example: '', completion: false};
@@ -57,10 +57,10 @@ function add_word(user, word, date) {
 
 exports.add_word = add_word;
 
-function add_words(user, words, date) {
+function add_words(user, date, words) {
     let promises = [];
     words.forEach(function (word) {
-        promises.push(add_word(user, word, date));
+        promises.push(add_word(user, date, word));
     });
 
     return Promise.all(promises);

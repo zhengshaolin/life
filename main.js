@@ -207,7 +207,7 @@ app.post('/words/:date', function (req, res) {
     let date = req.params.date;
 
     verify_token(token).then(function (user) {
-        return English.add_words(user, req.body, date);
+        return English.add_words(user, date, req.body);
     }).then(function (result) {
         res.json(result);
     }).catch(function (err) {
