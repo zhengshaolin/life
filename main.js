@@ -240,14 +240,20 @@ app.get('/words', function (req, res) {
     verify_token(token).then(function (user) {
         let promises = [];
         dates.forEach(function (date) {
-            words[date] = [];
+            words[date] = {};
+            words[date].first = [];
+            words[date].revise = [];
             promises.push(English.list_words(user, date));
         });
         return Promise.all(promises);
     }).then(function (wordsList) {
         wordsList.forEach(function (wordsListForOneDay) {
             wordsListForOneDay.forEach(function (word) {
-                words[word.date].push(word);
+                if (word.memory == 1) {
+                    words[word.date].first.push(word);
+                } else {
+                    words[word.date].revise.push(word);
+                }
             });
         });
         res.json(words);
