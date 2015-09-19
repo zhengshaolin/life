@@ -231,6 +231,32 @@ app.get('/words/:date', function (req, res) {
     });
 });
 
+// 查多日单词
+app.get('/words', function (req, res) {
+    let token = req.headers.token;
+    let dates = req.query.dates.split(',');
+    let words = {};
+
+    verify_token(token).then(function (user) {
+        let promises = [];
+        dates.forEach(function (date) {
+            words[date] = [];
+            promises.push(English.list_words(user, date));
+        });
+        return Promise.all(promises);
+    }).then(function (wordsList) {
+        wordsList.forEach(function (wordsListForOneDay) {
+            wordsListForOneDay.forEach(function (word) {
+                words[word.date].push(word);
+            });
+        });
+        res.json(words);
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500).end(err.toString());
+    });
+});
+
 app.listen(8080);
 
 function get_user(username, password) {
