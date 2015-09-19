@@ -59,7 +59,7 @@ exports.get_day = get_day;
 
 function set_day(user, date, retrospect) {
     return new Promise(function (resolve, reject) {
-        db.collection('days').updateOne({user: user, date: date}, {retrospect: retrospect}, function (err, day) {
+        db.collection('days').updateOne({user: user, date: date}, {$set: {retrospect: retrospect}}, function (err, day) {
             if (err) {
                 reject('set_day failed, caused by: ' + err.toString());
             } else {
@@ -176,7 +176,7 @@ function update_event(event) {
     return new Promise(function (resolve, reject) {
         let id = ObjectID(event._id);
         delete event._id;
-        db.collection('events').updateOne({_id: id}, event, function (err, result) {
+        db.collection('events').updateOne({_id: id}, {$set: event}, function (err, result) {
             if (err) {
                 reject('update_event failed, caused by: ' + err.toString());
             } else {
@@ -222,7 +222,7 @@ exports.get_daily_plan = get_daily_plan;
 
 function set_daily_plan(user, plan) {
     return new Promise(function (resolve, reject) {
-        db.collection('plans').updateOne({user: user, type: 'daily'}, plan, {upsert: true}, function (err, result) {
+        db.collection('plans').updateOne({user: user, type: 'daily'}, {$set: plan}, {upsert: true}, function (err, result) {
             if (err) {
                 reject('set_daily_plan failed, caused by: ' + err.toString());
             } else {
@@ -256,7 +256,7 @@ exports.get_weekly_plan = get_weekly_plan;
 function set_weekly_plan(user, plan) {
     console.log(user, plan);
     return new Promise(function (resolve, reject) {
-        db.collection('plans').updateOne({user: user, type: 'weekly'}, plan, {upsert: true}, function (err, result) {
+        db.collection('plans').updateOne({user: user, type: 'weekly'}, {$set: plan}, {upsert: true}, function (err, result) {
             if (err) {
                 reject('set_weekly_plan failed, caused by: ', err.toString());
             } else {

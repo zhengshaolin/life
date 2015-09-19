@@ -108,7 +108,7 @@ function update_word(word) {
     return new Promise(function (resolve, reject) {
         let id = word._id;
         delete word._id;
-        db.collection('words').update({_id: ObjectID(id)}, word, function (err, result) {
+        db.collection('words').updateOne({_id: ObjectID(id)}, {$set: word}, function (err, result) {
             if (err) {
                 reject('update_word failed, caused by: ' + err.toString());
             } else {
