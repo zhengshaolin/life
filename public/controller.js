@@ -74,7 +74,43 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
             console.log(err);
             alert(JSON.stringify(err));
         });
-    }
+    };
+
+    $scope.totalDuration = function () {
+        if ($scope.events.length > 0) {
+            return $scope.events.reduce(function (prev, curr) {
+                var duration = parseFloat(curr.duration);
+                return prev + duration;
+            }, 0);
+        } else {
+            return 0;
+        }
+    };
+
+    $scope.totalCompletion = function () {
+        if ($scope.events.length > 0) {
+            var completion = $scope.events.reduce(function (prev, curr) {
+                prev.totalHour += parseFloat(curr.duration);
+                prev.completedHour += parseFloat(curr.completion) * parseFloat(curr.duration) / 100;
+                return prev;
+            }, {totalHour: 0.0, completedHour: 0.0});
+
+            return Math.round(completion.completedHour * 10000 / completion.totalHour) / 100;
+        } else {
+            return 0;
+        }
+    };
+
+    $scope.distribution = function () {
+        return $scope.events.reduce(function (prev, curr) {
+            if (prev[curr.type]) {
+                prev[curr.type] += parseFloat(curr.duration);
+            } else {
+                prev[curr.type] = parseFloat(curr.duration);
+            }
+            return prev;
+        }, {});
+    };
 }]);
 
 // 管理模版

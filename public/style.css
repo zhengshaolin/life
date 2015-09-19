@@ -23,6 +23,11 @@ td {
     border: #ccc solid 1px;
     padding: 5px;
 }
+.title {
+    font-size: 13px;
+    line-height: 4em;
+    font-weight: bold;
+}
 .day_retrospect {
     border: #ccc solid 1px;
     width: 1201px;
@@ -97,6 +102,10 @@ td {
 }
 .event_in_schedule .event_retrospect {
     width: 200px;
+}
+.schedule_stat {
+    margin-top: 0px;
+    margin-bottom: 12px;
 }
 .words .date {
     float: left;
