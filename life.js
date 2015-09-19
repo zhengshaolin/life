@@ -133,7 +133,7 @@ function generate_schedule_from_daily(user, date) {
                 resolve([]);
             }
         }).catch(function (err) {
-            reject('generate_schedule_from_daily failed, caused by: ' + err);
+            reject('generate_schedule_from_daily failed, caused by: ' + err.toString());
         });
     });
 }
@@ -178,7 +178,7 @@ function update_event(event) {
         delete event._id;
         db.collection('events').updateOne({_id: id}, event, function (err, result) {
             if (err) {
-                reject('update_event failed, caused by: ' + err);
+                reject('update_event failed, caused by: ' + err.toString());
             } else {
                 resolve(result);
             }
@@ -190,7 +190,7 @@ function insert_event(event) {
     return new Promise(function (resolve, reject) {
         db.collection('events').insert(event, function (err, result) {
             if (err) {
-                reject('insert_event failed, caused by: ' + err);
+                reject('insert_event failed, caused by: ' + err.toString());
             } else {
                 resolve(result);
             }
