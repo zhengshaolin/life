@@ -104,8 +104,11 @@ td {
     width: 200px;
 }
 .schedule_stat {
-    margin-top: 0px;
+    margin-top: 0;
     margin-bottom: 12px;
+}
+.schedule_show .label {
+    font-weight: bold;
 }
 .words .date {
     float: left;

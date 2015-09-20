@@ -51,6 +51,8 @@ var Crypto = require('crypto');
 var Mongodb = require('mongodb');
 var ObjectID = require('mongodb').ObjectID;
 
+var Qrcode = require('qrcode');
+
 var Life = require('./life.js');
 var English = require('./english.js');
 
@@ -108,7 +110,23 @@ app.get('/retrospect/:date', function (req, res) {
     });
 });
 
-// 读取指定日期的总结
+// 读取其他人指定日期的总结
+app.get('/retrospect/:date/show/:other', function (req, res) {
+    let token = req.headers.token;
+    let other = req.params.other;
+    let date = req.params.date;
+
+    verify_token(token).then(function (user) {
+        return Life.get_day(other, date);
+    }).then(function (day) {
+        res.json(day);
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500).end(err.toString());
+    });
+});
+
+// 设置指定日期的总结
 app.put('/retrospect/:date', function (req, res) {
     let token = req.headers.token;
     let date = req.params.date;
@@ -130,6 +148,22 @@ app.get('/schedule/:date', function (req, res) {
 
     verify_token(token).then(function (user) {
         return Life.get_schedule(user, date);
+    }).then(function (events) {
+        res.json(events);
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500).end(err.toString());
+    });
+});
+
+// 读取其他人的计划
+app.get('/schedule/:date/show/:other', function (req, res) {
+    let token = req.headers.token;
+    let other = req.params.other;
+    let date = req.params.date;
+
+    verify_token(token).then(function (user) {
+        return Life.get_schedule(other, date);
     }).then(function (events) {
         res.json(events);
     }).catch(function (err) {
@@ -275,6 +309,16 @@ app.get('/words', function (req, res) {
     }).catch(function (err) {
         console.log(err);
         res.status(500).end(err.toString());
+    });
+});
+
+app.get('/qrcode', function (req, res) {
+    Qrcode.toDataURL(req.query.text, function (err, url) {
+        if (err) {
+            res.status(500).end(err.toString());
+        } else {
+            res.json({dataUrl: url});
+        }
     });
 });
 
