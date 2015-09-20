@@ -103,10 +103,12 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
 
     $scope.distribution = function () {
         return $scope.events.reduce(function (prev, curr) {
-            if (prev[curr.type]) {
-                prev[curr.type] += parseFloat(curr.duration);
-            } else {
-                prev[curr.type] = parseFloat(curr.duration);
+            if (curr.type) {
+                if (prev[curr.type]) {
+                    prev[curr.type] += parseFloat(curr.duration);
+                } else {
+                    prev[curr.type] = parseFloat(curr.duration);
+                }
             }
             return prev;
         }, {});
