@@ -317,7 +317,7 @@ Life.controller('WeeklyPlanController', ['$scope', '$location', '$http', functio
     };
 }]);
 
-Life.controller('EnglishController', ['$scope', '$location', '$http', '$q', function ($scope, $location, $http, $q) {
+Life.controller('EnglishController', ['$scope', '$routeParams', '$location', '$http', '$q', function ($scope, $routeParams, $location, $http, $q) {
     $scope.token = localStorage.token;
     if (!$scope.token) {
         $location.path('/login');
@@ -326,7 +326,11 @@ Life.controller('EnglishController', ['$scope', '$location', '$http', '$q', func
 
     $scope.user = $scope.token.split('-')[0];
 
-    $scope.today = moment();
+    if ($routeParams.date) {
+        $scope.today = moment($routeParams.date);
+    } else {
+        $scope.today = moment();
+    }
 
     $scope.dates = [];
     $scope.dates.push($scope.today.format('YYYY-MM-DD'));
@@ -419,6 +423,10 @@ Life.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'weekly_plan.html'
         }).
         when('/english', {
+            controller: 'EnglishController',
+            templateUrl: 'english.html'
+        }).
+        when('/english/:date', {
             controller: 'EnglishController',
             templateUrl: 'english.html'
         }).
