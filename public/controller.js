@@ -80,7 +80,14 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
         promises.push($http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: $scope.events}));
 
         $q.all(promises).then(function (responses) {
-            $scope.changed = false;
+            $http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'GET', headers: {token: $scope.token}}).then(function (response) {
+                $scope.events = response.data;
+                $scope.changed = false;
+                console.log($scope.events);
+            }, function (err) {
+                console.log(err);
+                alert(JSON.stringify(err));
+            });
         }, function (err) {
             console.log(err);
             alert(JSON.stringify(err));
