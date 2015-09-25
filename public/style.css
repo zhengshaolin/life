@@ -1,5 +1,9 @@
+@font-face {
+    font-family: "NotoSansCJK";
+    src: url("http://localhost:8080/public/NotoSansCJKsc-Thin.otf") format("opentype")
+}
 body, td, th, input {
-    font-family: "PT Mono";
+    font-family: "NotoSansCJK";
     font-weight: lighter;
     font-size: 11px;
 }
