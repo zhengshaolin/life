@@ -45,6 +45,14 @@
  *     restrospect: '' // 每日回顾总结
  * }
  *
+ * 工作池子：pools
+ * pools: {
+ *     user: 'K',
+ *     events: [
+ *         {priority: "1000", type, affair, objective, checkpoint, duration},
+ *     ]
+ * }
+ *
  */
 
 var Crypto = require('crypto');
@@ -227,6 +235,30 @@ app.get('/plan/daily', function (req, res) {
 app.put('/plan/daily', function (req, res) {
     verify_token(req.headers.token).then(function (user) {
         return Life.set_daily_plan(user, req.body);
+    }).then(function (result) {
+        res.json(result);
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500).end(err.toString());
+    });
+});
+
+// 读取工作池
+app.get('/pool', function (req, res) {
+    verify_token(req.headers.token).then(function (user) {
+        return Life.get_pool(user);
+    }).then(function (pool) {
+        res.json(pool.events);
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500).end(err.toString());
+    });
+});
+
+// 设置工作池
+app.put('/pool', function (req, res) {
+    verify_token(req.headers.token).then(function (user) {
+        return Life.set_pool(user, req.body);
     }).then(function (result) {
         res.json(result);
     }).catch(function (err) {

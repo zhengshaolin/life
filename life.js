@@ -293,3 +293,41 @@ function set_events(events) {
         });
     });
 }
+
+// 读取池子中的事件
+function get_pool(user) {
+    return new Promise(function (resolve, reject) {
+        db.collection('pools').findOne({user: user}, function (err, events) {
+            if (err) {
+                reject('get_pool failed, caused by: ' + err.toString());
+            } else {
+                if (events) {
+                    resolve(events);
+                } else {
+                    resolve({user: user, events: []})
+                }
+            }
+        });
+    });
+}
+
+exports.get_pool = get_pool;
+
+// 更新池子中的事件
+function set_pool(user, events) {
+    return new Promise(function (resolve, reject) {
+        db.collection('pools').update({user: user}, {$set: {events: events}}, {upsert: true}, function (err, events) {
+            if (err) {
+                reject('set_pool failed, caused by: ' + err.toString());
+            } else {
+                if (events) {
+                    resolve(events);
+                } else {
+                    resolve({user: user, events: []})
+                }
+            }
+        });
+    });
+}
+
+exports.set_pool = set_pool;
