@@ -49,7 +49,7 @@
  * pools: {
  *     user: 'K',
  *     events: [
- *         {priority: "1000", type, affair, objective, checkpoint, duration},
+ *         {priority: "1000", type, affair, objective, checkpoint},
  *     ]
  * }
  *
