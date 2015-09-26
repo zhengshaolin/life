@@ -31,6 +31,9 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
     $scope.date = $routeParams.date;
     $scope.changed = false;
 
+    $scope.events = [];
+    $scope.pool = [];
+
     $scope.retrospect = '';
 
     $http({url: '../retrospect/' + $scope.date, responseType: 'json', method: 'GET', headers: {token: $scope.token}}).then(function (response) {
@@ -42,7 +45,13 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
 
     $http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'GET', headers: {token: $scope.token}}).then(function (response) {
         $scope.events = response.data;
-        console.log($scope.events);
+    }, function (err) {
+        console.log(err);
+        alert(JSON.stringify(err));
+    });
+
+    $http({url: '../pool/', responseType: 'json', method: 'GET', headers: {token: $scope.token}}).then(function (response) {
+        $scope.pool = response.data;
     }, function (err) {
         console.log(err);
         alert(JSON.stringify(err));
@@ -69,21 +78,56 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
     };
 
     $scope.removeEvent = function (index) {
-        $scope.events.splice(index, 1);
+        $scope.events[index].deleted = true;
         $scope.changed = true;
     };
 
+    $scope.layToPool = function (index) {
+        var event = angular.copy($scope.events[index]);
+        delete event._id;
+        delete event.time;
+        delete event.completion;
+        delete event.retrospect;
+        delete event.duration;
+        event.priority = "100";
+        $scope.events[index].deleted = true;
+        $scope.pool.push(event);
+        $scope.changed = true;
+    };
+
+    $scope.moveOutOfPool = function (index) {
+        var event = $scope.pool[index];
+        delete event.priority;
+        event.user = $scope.user;
+        event.begin = $scope.date;
+        event.completion = "0";
+        $scope.pool.splice(index, 1);
+        $scope.events.push(event);
+        $scope.changed = true;
+    };
+
+    $scope.addEventInPool = function () {
+        $scope.pool.push({});
+    };
+
+    $scope.removeEventInPool = function (index) {
+        $scope.pool.splice(index, 1);
+        $scope.changed = true
+    };
+
     $scope.save = function () {
+        console.log($scope.events);
+        console.log($scope.pool);
         var promises = [];
 
         promises.push($http({url: '../retrospect/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: {retrospect: $scope.retrospect}}));
         promises.push($http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: $scope.events}));
+        promises.push($http({url: '../pool/', responseType: 'json', method: 'PUT', headers: {token: $scope.token}, data: $scope.pool}));
 
         $q.all(promises).then(function (responses) {
             $http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'GET', headers: {token: $scope.token}}).then(function (response) {
                 $scope.events = response.data;
                 $scope.changed = false;
-                console.log($scope.events);
             }, function (err) {
                 console.log(err);
                 alert(JSON.stringify(err));
@@ -97,8 +141,12 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
     $scope.totalDuration = function () {
         if ($scope.events && $scope.events.length > 0) {
             return $scope.events.reduce(function (prev, curr) {
-                var duration = parseFloat(curr.duration);
-                return prev + duration;
+                if (!curr.deleted) {
+                    var duration = parseFloat(curr.duration);
+                    return prev + duration;
+                } else {
+                    return prev;
+                }
             }, 0);
         } else {
             return 0;
@@ -108,8 +156,10 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
     $scope.totalCompletion = function () {
         if ($scope.events && $scope.events.length > 0) {
             var completion = $scope.events.reduce(function (prev, curr) {
-                prev.totalHour += parseFloat(curr.duration);
-                prev.completedHour += parseFloat(curr.completion) * parseFloat(curr.duration) / 100;
+                if (!curr.deleted) {
+                    prev.totalHour += parseFloat(curr.duration);
+                    prev.completedHour += parseFloat(curr.completion) * parseFloat(curr.duration) / 100;
+                }
                 return prev;
             }, {totalHour: 0.0, completedHour: 0.0});
 
@@ -122,11 +172,13 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
     $scope.distribution = function () {
         if ($scope.events) {
             return $scope.events.reduce(function (prev, curr) {
-                if (curr.type) {
-                    if (prev[curr.type]) {
-                        prev[curr.type] += parseFloat(curr.duration);
-                    } else {
-                        prev[curr.type] = parseFloat(curr.duration);
+                if (!curr.deleted) {
+                    if (curr.type) {
+                        if (prev[curr.type]) {
+                            prev[curr.type] += parseFloat(curr.duration);
+                        } else {
+                            prev[curr.type] = parseFloat(curr.duration);
+                        }
                     }
                 }
                 return prev;
