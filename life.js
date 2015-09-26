@@ -162,7 +162,11 @@ function set_schedule(user, date, events) {
     let updates = [];
     for (let event of events) {
         if (event.hasOwnProperty("_id")) {
-            updates.push(update_event(event));
+            if (event.deleted) {
+                updates.push(remove_event(event));
+            } else {
+                updates.push(update_event(event));
+            }
         } else {
             updates.push(insert_event(event));
         }
@@ -192,6 +196,19 @@ function insert_event(event) {
             if (err) {
                 reject('insert_event failed, caused by: ' + err.toString());
             } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+function remove_event(event) {
+    return new Promise(function (resolve, reject) {
+        db.collection('events').removeOne({_id: ObjectID(event._id)}, function (err, result) {
+            if (err) {
+                reject('remove_event failed, caused by: ' + err.toString());
+            } else {
+                console.log(result);
                 resolve(result);
             }
         });
