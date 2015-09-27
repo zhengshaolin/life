@@ -90,7 +90,6 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
         delete event.retrospect;
         delete event.duration;
         event.priority = "100";
-        $scope.events[index].deleted = true;
         $scope.pool.push(event);
         $scope.changed = true;
     };
