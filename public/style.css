@@ -78,35 +78,8 @@ td {
     border: none;
     outline: none;
 }
-.event_in_schedule .event_type {
-    width: 25px;
-}
-.event_in_schedule .event_time {
-    width: 30px;
-}
-.event_in_schedule .event_duration {
-    width: 30px;
-}
-.event_in_schedule .event_affair {
-    width: auto;
-}
-.event_in_schedule .event_objective {
-    width: auto;
-}
-.event_in_schedule .event_checkpoint {
-    width: 400px;
-}
-.event_in_schedule .event_completion {
-    text-align: right;
-    width: 40px;
-}
-.event_in_schedule .event_retrospect {
-    width: 200px;
-}
-.event_in_schedule .event_priority {
-    width: 40px;
-}
 .event_in_schedule .input {
+    display: inline;
     outline: none;
 }
 .schedule_stat {

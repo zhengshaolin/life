@@ -29,7 +29,6 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
 
     $scope.user = $scope.token.split('-')[0];
     $scope.date = $routeParams.date;
-    $scope.changed = false;
 
     $scope.events = [];
     $scope.pool = [];
@@ -68,18 +67,12 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
 
     $scope.share_qrcode = '';
 
-    $scope.setChanged = function (changed) {
-        $scope.changed = changed;
-    };
-
     $scope.insertEvent = function (index) {
         $scope.events.splice(index + 1, 0, {user: $scope.user, begin: $scope.date});
-        $scope.changed = true;
     };
 
     $scope.removeEvent = function (index) {
         $scope.events[index].deleted = true;
-        $scope.changed = true;
     };
 
     $scope.layToPool = function (index) {
@@ -91,7 +84,6 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
         delete event.duration;
         event.priority = "100";
         $scope.pool.push(event);
-        $scope.changed = true;
     };
 
     $scope.moveOutOfPool = function (index) {
@@ -102,7 +94,6 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
         event.completion = "0";
         $scope.pool.splice(index, 1);
         $scope.events.push(event);
-        $scope.changed = true;
     };
 
     $scope.addEventInPool = function () {
@@ -111,7 +102,6 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
 
     $scope.removeEventInPool = function (index) {
         $scope.pool.splice(index, 1);
-        $scope.changed = true
     };
 
     $scope.save = function () {
@@ -126,7 +116,7 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
         $q.all(promises).then(function (responses) {
             $http({url: '../schedule/' + $scope.date, responseType: 'json', method: 'GET', headers: {token: $scope.token}}).then(function (response) {
                 $scope.events = response.data;
-                $scope.changed = false;
+                alert('SAVED');
             }, function (err) {
                 console.log(err);
                 alert(JSON.stringify(err));

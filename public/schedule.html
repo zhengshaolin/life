@@ -36,6 +36,7 @@
             </tr>
         </tbody>
     </table>
+    <button ng-click="save()" class="save"><i class="fa fa-floppy-o fa-lg"></i></button>
 </div>
 <div>
     <span class="title">今天过得怎么样？</span>
@@ -69,20 +70,20 @@
             </thead>
             <tbody>
                 <tr ng-repeat="event in events" ng-if="!event.deleted" class="event_in_schedule">
-                    <td><input type="text" ng-model="event.type" class="event_type" placeholder="TYPE" ng-change="setChanged(true)"></td>
-                    <td><input type="text" ng-model="event.time" class="event_time" placeholder="TIME" ng-change="setChanged(true)">/<input type="text" ng-model="event.duration" class="event_duration" placeholder="1.0"  ng-change="setChanged(true)"></td>
-                    <td><input type="text" ng-model="event.affair" class="event_affair" placeholder="AFFAIR" ng-change="setChanged(true)"></td>
-                    <td><input type="text" ng-model="event.objective" class="event_objective" placeholder="OBJECTIVE" ng-change="setChanged(true)"></td>
-                    <td><input type="text" ng-model="event.checkpoint" class="event_checkpoint" placeholder="CHECKPOINTS" ng-change="setChanged(true)"></td>
-                    <td><input type="text" ng-model="event.completion" class="event_completion" placeholder="COMPLETION" ng-change="setChanged(true)">%</td>
-                    <td><input type="text" ng-model="event.retrospect" class="event_retrospect" placeholder="RETROSPECT" ng-change="setChanged(true)"></td>
+                    <td><div contenteditable="true" ng-model="event.type" class="input"></div></td>
+                    <td><div contenteditable="true" ng-model="event.time" class="input"></div>/<div contenteditable="true" ng-model="event.duration" class="input"></div></td>
+                    <td><div contenteditable="true" ng-model="event.affair" class="input"></div></td>
+                    <td><div contenteditable="true" ng-model="event.objective" class="input"></div></td>
+                    <td><div contenteditable="true" ng-model="event.checkpoint" class="input"></div></td>
+                    <td><div contenteditable="true" ng-model="event.completion" class="input"></div>%</td>
+                    <td><div contenteditable="true" ng-model="event.retrospect" class="input"></div></td>
                     <td><button ng-click="insertEvent($index)" class="new_event"><i class="fa fa-plus-square"></i></button></td>
                     <td><button ng-click="removeEvent($index)" class="forget"><i class="fa fa-archive"></i></button></td>
                     <td><button ng-click="layToPool($index)" class="lay"><i class="fa fa-arrow-circle-up"></i></button></td>
                 </tr>
             </tbody>
         </table>
-        <button type="submit" ng-disabled="!changed" ng-click="save()" class="save"><i class="fa fa-floppy-o fa-lg"></i></button>
+        <button type="submit" ng-click="save()" class="save"><i class="fa fa-floppy-o fa-lg"></i></button>
     </form>
 </div>
 <img src="{{share_qrcode}}"/>
