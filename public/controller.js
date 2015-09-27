@@ -188,6 +188,30 @@ Life.controller('ScheduleController', ['$scope', '$routeParams', '$location', '$
     };
 }]);
 
+Life.directive("contenteditable", function() {
+    return {
+        restrict: "A",
+        require: "?ngModel",
+        link: function(scope, element, attrs, ngModel) {
+            if (!ngModel) {
+                return;
+            }
+
+            function read() {
+                ngModel.$setViewValue(element.html());
+            }
+
+            ngModel.$render = function() {
+                element.html(ngModel.$viewValue || "");
+            };
+
+            element.bind("blur keyup change", function() {
+                scope.$apply(read);
+            });
+        }
+    };
+});
+
 // 展示日程
 Life.controller('ScheduleShowController', ['$scope', '$routeParams', '$location', '$http', function ($scope, $routeParams, $location, $http) {
     $scope.token = localStorage.token;

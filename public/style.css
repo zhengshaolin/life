@@ -106,6 +106,9 @@ td {
 .event_in_schedule .event_priority {
     width: 40px;
 }
+.event_in_schedule .input {
+    outline: none;
+}
 .schedule_stat {
     margin-top: 0;
     margin-bottom: 12px;

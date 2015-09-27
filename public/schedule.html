@@ -16,12 +16,21 @@
             <tr>
                 <td colspan="8"><button ng-click="addEventInPool()"><i class="fa fa-plus-square"></i></button></td>
             </tr>
+            <!--<tr ng-repeat="event in pool" class="event_in_schedule">-->
+                <!--<td><input type="text" ng-model="event.priority" class="event_priority" placeholder="PRIORITY" ng-change="setChanged(true)"></td>-->
+                <!--<td><input type="text" ng-model="event.type" class="event_type" placeholder="TYPE" ng-change="setChanged(true)"></td>-->
+                <!--<td><input type="text" ng-model="event.affair" class="event_affair" placeholder="AFFAIR" ng-change="setChanged(true)"></td>-->
+                <!--<td><input type="text" ng-model="event.objective" class="event_objective" placeholder="OBJECTIVE" ng-change="setChanged(true)"></td>-->
+                <!--<td><input type="text" ng-model="event.checkpoint" class="event_checkpoint" placeholder="CHECKPOINT" ng-change="setChanged(true)"></td>-->
+                <!--<td><button ng-click="removeEventInPool($index)" class="forget"><i class="fa fa-archive"></i></button></td>-->
+                <!--<td><button ng-click="moveOutOfPool($index)" class="lay"><i class="fa fa-arrow-circle-down"></i></button></td>-->
+            <!--</tr>-->
             <tr ng-repeat="event in pool" class="event_in_schedule">
-                <td><input type="text" ng-model="event.priority" class="event_priority" placeholder="PRIORITY" ng-change="setChanged(true)"></td>
-                <td><input type="text" ng-model="event.type" class="event_type" placeholder="TYPE" ng-change="setChanged(true)"></td>
-                <td><input type="text" ng-model="event.affair" class="event_affair" placeholder="AFFAIR" ng-change="setChanged(true)"></td>
-                <td><input type="text" ng-model="event.objective" class="event_objective" placeholder="OBJECTIVE" ng-change="setChanged(true)"></td>
-                <td><input type="text" ng-model="event.checkpoint" class="event_checkpoint" placeholder="CHECKPOINT" ng-change="setChanged(true)"></td>
+                <td><span contenteditable="true" ng-model="event.priority" class="input"></span></td>
+                <td><span contenteditable="true" ng-model="event.type" class="input"></span></td>
+                <td><span contenteditable="true" ng-model="event.affair" class="input"></span></td>
+                <td><span contenteditable="true" ng-model="event.objective" class="input"></span></td>
+                <td><span contenteditable="true" ng-model="event.checkpoint" class="input"></span></td>
                 <td><button ng-click="removeEventInPool($index)" class="forget"><i class="fa fa-archive"></i></button></td>
                 <td><button ng-click="moveOutOfPool($index)" class="lay"><i class="fa fa-arrow-circle-down"></i></button></td>
             </tr>
