@@ -1,0 +1,31 @@
+{
+  "name": "life",
+  "version": "2.0.0",
+  "description": "keep words in memory",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloverzero/life.git"
+  },
+  "keywords": [
+    "memory",
+    "learning"
+  ],
+  "author": "shaolinzheng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cloverzero/life/issues"
+  },
+  "homepage": "https://github.com/cloverzero/life#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "crypto": "0.0.3",
+    "express": "^4.13.4",
+    "kerberos": "0.0.18",
+    "moment": "^2.11.1",
+    "mongodb": "^2.1.4"
+  }
+}

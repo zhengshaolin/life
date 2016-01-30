@@ -59,7 +59,7 @@ var Crypto = require('crypto');
 var Mongodb = require('mongodb');
 var ObjectID = require('mongodb').ObjectID;
 
-var Qrcode = require('qrcode');
+//var Qrcode = require('qrcode');
 
 var Life = require('./life.js');
 var English = require('./english.js');
@@ -344,15 +344,15 @@ app.get('/words', function (req, res) {
     });
 });
 
-app.get('/qrcode', function (req, res) {
-    Qrcode.toDataURL(req.query.text, function (err, url) {
-        if (err) {
-            res.status(500).end(err.toString());
-        } else {
-            res.json({dataUrl: url});
-        }
-    });
-});
+//app.get('/qrcode', function (req, res) {
+//    Qrcode.toDataURL(req.query.text, function (err, url) {
+//        if (err) {
+//            res.status(500).end(err.toString());
+//        } else {
+//            res.json({dataUrl: url});
+//        }
+//    });
+//});
 
 app.listen(8080);
 
