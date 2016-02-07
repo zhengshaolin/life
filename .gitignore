@@ -1,5 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 node_modules
+bower_components
 
 # IntelliJ project files
 .idea

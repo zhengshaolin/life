@@ -42,6 +42,30 @@ function insert_word(word) {
 	});
 }
 
+function insertPhrase(phrase) {
+    return new Promise(function (resolve, reject) {
+        db.collection('phrases').insertOne(phrase, function (err, result) {
+            if (!err) {
+                resolve(result);
+            } else {
+                reject('insert phrase failed, caused by: ' + err);
+            }
+        })
+    })
+}
+
+function findPhrasesByWord (word, user) {
+    return new Promise(function (resolve, reject) {
+       db.collection('phrases').find({word: word, user: user}).toArray(function (err, result) {
+           if (!err) {
+               resolve(result);
+           } else {
+               reject('find phrases failed, caused by: ' + err + ", input:" + word + ", " + user);
+           }
+       })
+    });
+}
+
 function add_word(user, date, word) {
     let first = new Date(date);
     let word1 = {user: user, word: word, date: moment(first).format('YYYY-MM-DD'), memory: 1, example: '', completion: false};
@@ -74,9 +98,22 @@ function list_words(user, date) {
             if (err) {
                 reject('list_words failed, caused by: ' + err.toString());
             } else {
+                console.log(words);
                 resolve(words);
             }
         });
+    }).then(function (words) {
+        var promises = [];
+        for (let word of words) {
+            promises.push(findPhrasesByWord(word.word, user));
+        }
+        return Promise.all(promises);
+    }).then(function (phraseList) {
+        for (let anReturn of phraseList) {
+            console.log(anReturn);
+        }
+
+        return {status: "no ok"};
     });
 }
 

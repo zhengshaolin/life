@@ -16,12 +16,6 @@ angular.module('life').controller('EnglishController', ['$scope', '$routeParams'
 
     $scope.dates = [];
     $scope.dates.push($scope.today.format('YYYY-MM-DD'));
-    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
-    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
-    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
-    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
-    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
-    $scope.dates.push($scope.today.add(1, 'days').format('YYYY-MM-DD'));
 
     $scope.newWords = {};
 
@@ -33,7 +27,7 @@ angular.module('life').controller('EnglishController', ['$scope', '$routeParams'
         }
     });
 
-    $http({url: '../words', method: 'GET', responseType: 'json', params: {dates: $scope.datesQuery}, headers: {token: $scope.token}}).then(function (response) {
+    $http({url: '/words/' + $scope.dates[0], method: 'GET', responseType: 'json', params: {dates: $scope.datesQuery}, headers: {token: $scope.token}}).then(function (response) {
         $scope.words = response.data;
     }, function (err) {
         console.log(err);
@@ -42,18 +36,10 @@ angular.module('life').controller('EnglishController', ['$scope', '$routeParams'
 
     $scope.save = function (date) {
         $scope.words[date].first.forEach(function (word) {
-            if (word.example) {
-                word.completion = true;
-            } else {
-                word.completion = false;
-            }
+            word.completion = !!word.example;
         });
         $scope.words[date].revise.forEach(function (word) {
-            if (word.example) {
-                word.completion = true;
-            } else {
-                word.completion = false;
-            }
+            word.completion = !!word.example;
         });
 
         var promises = [];
@@ -63,15 +49,15 @@ angular.module('life').controller('EnglishController', ['$scope', '$routeParams'
                 return word.trim();
             });
 
-            var postNewWords = $http({url: '../words/' + date, method: 'POST', responseType: 'json', data: newWords, headers: {token: $scope.token}});
+            var postNewWords = $http({url: '/words/' + date, method: 'POST', responseType: 'json', data: newWords, headers: {token: $scope.token}});
             promises.push(postNewWords);
         }
 
-        var updateWords = $http({url: '../words/' + date, method: 'PUT', responseType: 'json', data: $scope.words[date], headers: {token: $scope.token}});
+        var updateWords = $http({url: '/words/' + date, method: 'PUT', responseType: 'json', data: $scope.words[date], headers: {token: $scope.token}});
         promises.push(updateWords);
 
         $q.all(promises).then(function (responses) {
-            return $http({url: '../words', method: 'GET', responseType: 'json', params: {dates: $scope.datesQuery}, headers: {token: $scope.token}});
+            return $http({url: '/words', method: 'GET', responseType: 'json', params: {dates: $scope.datesQuery}, headers: {token: $scope.token}});
         }, function (err) {
             console.log(err);
             alert(JSON.stringify(err));
