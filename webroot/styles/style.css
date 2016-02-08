@@ -1,0 +1,100 @@
+body, td, th, input {
+    font-family: "PT Mono";
+    font-weight: lighter;
+    font-size: 11px;
+}
+body {
+    background-color: #F2F1ED;
+}
+input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+table {
+    border-collapse: collapse;
+}
+td {
+    border: #ccc solid 1px;
+    padding: 5px;
+}
+.title {
+    font-size: 13px;
+    line-height: 4em;
+    font-weight: bold;
+}
+.day_retrospect {
+    border: #ccc solid 1px;
+    width: 1201px;
+}
+.day_retrospect textarea {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 5px;
+    resize: none;
+}
+.navi {
+    padding: 5px;
+}
+.event_in_plan {
+    margin: 10px;
+}
+.event_in_plan input {
+    border-bottom: 1px solid #CCC;
+}
+.event_in_plan .event_type {
+    width: 30px;
+}
+.event_in_plan .event_time {
+    width: 30px;
+}
+.event_in_plan .event_duration {
+    width: 30px;
+}
+.event_in_plan .event_affair {
+    width: 150px;
+}
+.event_in_plan .event_objective {
+    width: 150px;
+}
+.event_in_plan .event_checkpoint {
+    width: 400px;
+}
+.daily_plan .forget {
+    border: none;
+    outline: none;
+}
+.weekly_plan .new_event {
+    border: none;
+    outline: none;
+}
+.weekly_plan .forget {
+    border: none;
+    outline: none;
+}
+.event_in_schedule .input {
+    display: inline;
+    outline: none;
+}
+.schedule_stat {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+.schedule_show .label {
+    font-weight: bold;
+}
+.words .date {
+    float: left;
+    border: 1px solid #CCC;
+    margin: 10px;
+}
+.words input {
+    font-style: italic;
+    color: #999;
+}

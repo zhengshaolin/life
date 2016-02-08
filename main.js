@@ -88,7 +88,7 @@ app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({extended: true, limit: '1000kb'}));
 
 // 配置静态目录
-app.use('/public', Express.static('public/'));
+app.use('/public', Express.static('dist/'));
 
 // 登录
 app.get('/token', function (req, res) {

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="life">
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width"/>
+  <title>Schedule</title>
+
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/style.css">
+  <!-- endbuild -->
+</head>
+<body>
+<div ng-view></div>
+
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js({.tmp,webroot}) scripts/scripts.js -->
+<script src="scripts/app.js"></script>
+<script src="scripts/directives/contenteditable.js"></script>
+<script src="scripts/controllers/login_ctrl.js"></script>
+<script src="scripts/controllers/missing_ctrl.js"></script>
+<script src="scripts/controllers/english_ctrl.js"></script>
+<script src="scripts/controllers/weekly_plan_ctrl.js"></script>
+<script src="scripts/controllers/daily_plan_ctrl.js"></script>
+<script src="scripts/controllers/schedule_show_ctrl.js"></script>
+<script src="scripts/controllers/schedule_ctrl.js"></script>
+<!-- endbuild -->
+</body>
+</html>
