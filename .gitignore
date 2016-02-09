@@ -3,6 +3,7 @@
 /bower_components
 /dist
 /.tmp
+.DS_Store
 
 # IntelliJ project files
 .idea

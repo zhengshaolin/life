@@ -23,10 +23,6 @@ angular.module('life', ['ngRoute'])
             controller: 'EnglishController',
             templateUrl: 'views/english.html'
         }).
-        when('/english/:date', {
-            controller: 'EnglishController',
-            templateUrl: 'views/english.html'
-        }).
         when('/login', {
             controller: 'LoginController',
             templateUrl: 'views/login.html'

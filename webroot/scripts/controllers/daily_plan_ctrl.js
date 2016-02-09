@@ -1,7 +1,7 @@
 "use strict";
 // 管理模版
 angular.module('life')
-    .controller('DailyPlanController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
+    .controller('DailyPlanController', function ($scope, $location, $http) {
     $scope.token = localStorage.token;
     if (!$scope.token) {
         $location.path('/login');
@@ -52,4 +52,4 @@ angular.module('life')
             alert(JSON.stringify(err));
         });
     };
-}]);
+});

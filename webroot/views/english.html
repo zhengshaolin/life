@@ -1,50 +1,76 @@
-<div>
-    <h2>{{user}}</h2>
-</div>
-<div>
-    <h3>最近{{dates.length}}天的单词表</h3>
-</div>
-<div class="words">
-    <div class="date" ng-repeat="date in dates">
-        <table>
-            <tbody>
-                <tr>
-                    <td>{{date}}<button ng-click="save(date)"><i class="fa fa-floppy-o"></i></button></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span>NEW</span>
-                        <span><input class="new" size="50" ng-model="newWords[date]" placeholder="put new words here"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div ng-repeat="word in words[date].first">
-                            <span>
-                                <i ng-if="word.completion" class="fa fa-calendar-check-o"></i>
-                                <i ng-if="!word.completion" class="fa fa-calendar-o"></i>
-                                {{word.word}}
-                            </span>
-                            <span ng-if="word.example">-</span>
-                            <span><input class="example" type="text" size="50" ng-model="word.example"></span>
-                        </div>
-                    </td>
-                </tr>
-                <tr><td>REVISE</td></tr>
-                <tr>
-                    <td>
-                        <div ng-repeat="word in words[date].revise">
-                            <span>
-                                <i ng-if="word.completion" class="fa fa-calendar-check-o"></i>
-                                <i ng-if="!word.completion" class="fa fa-calendar-o"></i>
-                                {{word.word}}
-                            </span>
-                            <span ng-if="word.example">-</span>
-                            <span><input class="example" type="text" size="50" ng-model="word.example"></span>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+<h3>今天的单词表</h3>
+
+<form class="form-inline">
+  <div class="form-group">
+    <label for="newWord">New words</label>
+    <input type="text" id="newWord" class="form-control" placeholder="put new words here"/>
+  </div>
+  <button type="submit" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+  </button>
+</form>
+<hr/>
+<form class="form-horizontal">
+  <h4>NEW</h4>
+  <dl ng-repeat="word in content.first">
+    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}}</dt>
+    <dd ng-repeat="phrase in content.phrases[word.word]" class="form-group">
+      <label class="control-label col-sm-2">{{phrase}}</label>
+      <div class="col-sm-10">
+        <div class="input-group">
+          <input type="text" class="form-control"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-save-file"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </dd>
+    <dd class="form-group">
+      <label class="control-label col-sm-2">New Phrase</label>
+      <div class="col-sm-10">
+        <div class="input-group">
+          <input type="text" class="form-control"/>
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </dd>
+  </dl>
+  <hr/>
+  <h4>REVISE</h4>
+  <dl ng-repeat="word in content.revise">
+    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}}</dt>
+    <dd ng-repeat="phrase in content.phrases[word.word]" class="form-group">
+      <label class="control-label col-sm-2">{{phrase}}</label>
+      <div class="col-sm-10">
+        <div class="input-group">
+          <input type="text" class="form-control"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-save-file"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </dd>
+    <dd class="form-group">
+      <label class="control-label col-sm-2">New Phrase</label>
+      <div class="col-sm-10">
+        <div class="input-group">
+          <input type="text" class="form-control"/>
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </dd>
+  </dl>
+</form>
+
