@@ -59,23 +59,25 @@ var Crypto = require('crypto');
 var Mongodb = require('mongodb');
 var ObjectID = require('mongodb').ObjectID;
 
-var Qrcode = require('qrcode');
+//var Qrcode = require('qrcode');
 
 var Life = require('./life.js');
 var English = require('./english.js');
+
+var phraseRouter = require('./routes/phrase');
 
 var server = new Mongodb.Server('127.0.0.1', 27017, {auto_reconnect: true});
 var database = new Mongodb.Db('life', server, {safe: true});
 var db;
 database.open(function (err, mongo) {
-    if (!err) {
-        console.log('life database connected');
-        db = mongo;
-        Life.bind_db(mongo);
-        English.bind_db(mongo);
-    } else {
-        console.log('life database unreachable: ' + err);
-    }
+  if (!err) {
+    console.log('life database connected');
+    db = mongo;
+    Life.bind_db(mongo);
+    English.bind_db(mongo);
+  } else {
+    console.log('life database unreachable: ' + err);
+  }
 });
 
 var Express = require('express');
@@ -88,312 +90,314 @@ app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({extended: true, limit: '1000kb'}));
 
 // 配置静态目录
-app.use('/public', Express.static('public/'));
+app.use('/public', Express.static('dist/'));
+
+app.use('/', phraseRouter);
 
 // 登录
 app.get('/token', function (req, res) {
-    get_user(req.query.username, req.query.password).then(function (user) {
-        let signature = Crypto.createHash('md5').update(user.username + 'LIFE').digest('hex');
-        return user.username + '-' + signature;
-    }).then(function (token) {
-        res.json({token: token});
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  get_user(req.query.username, req.query.password).then(function (user) {
+    let signature = Crypto.createHash('md5').update(user.username + 'LIFE').digest('hex');
+    return user.username + '-' + signature;
+  }).then(function (token) {
+    res.json({token: token});
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 读取指定日期的总结
 app.get('/retrospect/:date', function (req, res) {
-    let token = req.headers.token;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return Life.get_day(user, date);
-    }).then(function (day) {
-        res.json(day);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function (user) {
+    return Life.get_day(user, date);
+  }).then(function (day) {
+    res.json(day);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 读取其他人指定日期的总结
 app.get('/retrospect/:date/show/:other', function (req, res) {
-    let token = req.headers.token;
-    let other = req.params.other;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let other = req.params.other;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return Life.get_day(other, date);
-    }).then(function (day) {
-        res.json(day);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function (user) {
+    return Life.get_day(other, date);
+  }).then(function (day) {
+    res.json(day);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 设置指定日期的总结
 app.put('/retrospect/:date', function (req, res) {
-    let token = req.headers.token;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return Life.set_day(user, date, req.body.retrospect);
-    }).then(function (day) {
-        res.json(day);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function (user) {
+    return Life.set_day(user, date, req.body.retrospect);
+  }).then(function (day) {
+    res.json(day);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 读取指定日期的计划
 app.get('/schedule/:date', function (req, res) {
-    let token = req.headers.token;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return Life.get_schedule(user, date);
-    }).then(function (events) {
-        res.json(events);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function (user) {
+    return Life.get_schedule(user, date);
+  }).then(function (events) {
+    res.json(events);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 读取其他人的计划
 app.get('/schedule/:date/show/:other', function (req, res) {
-    let token = req.headers.token;
-    let other = req.params.other;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let other = req.params.other;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return Life.get_schedule(other, date);
-    }).then(function (events) {
-        res.json(events);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function (user) {
+    return Life.get_schedule(other, date);
+  }).then(function (events) {
+    res.json(events);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 更新指定日期的计划
 app.put('/schedule/:date', function (req, res) {
-    let token = req.headers.token;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return Life.set_schedule(user, date, req.body);
-    }).then(function (result) {
-        res.json(result);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function (user) {
+    return Life.set_schedule(user, date, req.body);
+  }).then(function (result) {
+    res.json(result);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 读取周计划
 app.get('/plan/weekly', function (req, res) {
-    verify_token(req.headers.token).then(function (user) {
-        return Life.get_weekly_plan(user);
-    }).then(function (plan) {
-        res.json(plan);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(req.headers.token).then(function (user) {
+    return Life.get_weekly_plan(user);
+  }).then(function (plan) {
+    res.json(plan);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 设置周计划
 app.put('/plan/weekly', function (req, res) {
-    verify_token(req.headers.token).then(function (user) {
-        return Life.set_weekly_plan(user, req.body);
-    }).then(function (result) {
-        res.json(result);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(req.headers.token).then(function (user) {
+    return Life.set_weekly_plan(user, req.body);
+  }).then(function (result) {
+    res.json(result);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 读取日计划
 app.get('/plan/daily', function (req, res) {
-    verify_token(req.headers.token).then(function (user) {
-        return Life.get_daily_plan(user);
-    }).then(function (plan) {
-        res.json(plan);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(req.headers.token).then(function (user) {
+    return Life.get_daily_plan(user);
+  }).then(function (plan) {
+    res.json(plan);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 设置日计划
 app.put('/plan/daily', function (req, res) {
-    verify_token(req.headers.token).then(function (user) {
-        return Life.set_daily_plan(user, req.body);
-    }).then(function (result) {
-        res.json(result);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(req.headers.token).then(function (user) {
+    return Life.set_daily_plan(user, req.body);
+  }).then(function (result) {
+    res.json(result);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 读取工作池
 app.get('/pool', function (req, res) {
-    verify_token(req.headers.token).then(function (user) {
-        return Life.get_pool(user);
-    }).then(function (pool) {
-        res.json(pool.events);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(req.headers.token).then(function (user) {
+    return Life.get_pool(user);
+  }).then(function (pool) {
+    res.json(pool.events);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 设置工作池
 app.put('/pool', function (req, res) {
-    verify_token(req.headers.token).then(function (user) {
-        return Life.set_pool(user, req.body);
-    }).then(function (result) {
-        res.json(result);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(req.headers.token).then(function (user) {
+    return Life.set_pool(user, req.body);
+  }).then(function (result) {
+    res.json(result);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 新增单词
 app.post('/words/:date', function (req, res) {
-    let token = req.headers.token;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return English.add_words(user, date, req.body);
-    }).then(function (result) {
-        res.json(result);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function (user) {
+    return English.add_words(user, date, req.body);
+  }).then(function (result) {
+    res.json(result);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 查某日单词
 app.get('/words/:date', function (req, res) {
-    let token = req.headers.token;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return English.list_words(user, date);
-    }).then(function (words) {
-        res.json(words);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function (user) {
+    return English.list_words(user, date);
+  }).then(function (words) {
+    res.json(words);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 更新某日单词
 app.put('/words/:date', function (req, res) {
-    let token = req.headers.token;
-    let date = req.params.date;
+  let token = req.headers.token;
+  let date = req.params.date;
 
-    verify_token(token).then(function (user) {
-        return English.update_words(user, date, req.body);
-    }).then(function (result) {
-        res.json(result);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
-    });
+  verify_token(token).then(function () {
+    return English.updateWord(req.body);
+  }).then(function (result) {
+    res.json(result);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
 
 // 查多日单词
 app.get('/words', function (req, res) {
-    let token = req.headers.token;
-    let dates = req.query.dates.split(',');
-    let words = {};
+  let token = req.headers.token;
+  let dates = req.query.dates.split(',');
+  let words = {};
 
-    verify_token(token).then(function (user) {
-        let promises = [];
-        dates.forEach(function (date) {
-            words[date] = {};
-            words[date].first = [];
-            words[date].revise = [];
-            promises.push(English.list_words(user, date));
-        });
-        return Promise.all(promises);
-    }).then(function (wordsList) {
-        wordsList.forEach(function (wordsListForOneDay) {
-            wordsListForOneDay.forEach(function (word) {
-                if (word.memory == 1) {
-                    words[word.date].first.push(word);
-                } else {
-                    words[word.date].revise.push(word);
-                }
-            });
-        });
-        res.json(words);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).end(err.toString());
+  verify_token(token).then(function (user) {
+    let promises = [];
+    dates.forEach(function (date) {
+      words[date] = {};
+      words[date].first = [];
+      words[date].revise = [];
+      promises.push(English.list_words(user, date));
     });
-});
-
-app.get('/qrcode', function (req, res) {
-    Qrcode.toDataURL(req.query.text, function (err, url) {
-        if (err) {
-            res.status(500).end(err.toString());
+    return Promise.all(promises);
+  }).then(function (wordsList) {
+    wordsList.forEach(function (wordsListForOneDay) {
+      wordsListForOneDay.forEach(function (word) {
+        if (word.memory == 1) {
+          words[word.date].first.push(word);
         } else {
-            res.json({dataUrl: url});
+          words[word.date].revise.push(word);
         }
+      });
     });
+    res.json(words);
+  }).catch(function (err) {
+    console.log(err);
+    res.status(500).end(err.toString());
+  });
 });
+
+//app.get('/qrcode', function (req, res) {
+//    Qrcode.toDataURL(req.query.text, function (err, url) {
+//        if (err) {
+//            res.status(500).end(err.toString());
+//        } else {
+//            res.json({dataUrl: url});
+//        }
+//    });
+//});
 
 app.listen(8080);
 
 function get_user(username, password) {
-    return new Promise(function (resolve, reject) {
-        db.collection('users').findOne({username: username, password: password}, function (err, user) {
-            if (err) {
-                reject(err);
-            } else {
-                if (user) {
-                    resolve(user);
-                } else {
-                    reject('can\'t find user');
-                }
-            }
-        });
+  return new Promise(function (resolve, reject) {
+    db.collection('users').findOne({username: username, password: password}, function (err, user) {
+      if (err) {
+        reject(err);
+      } else {
+        if (user) {
+          resolve(user);
+        } else {
+          reject('can\'t find user');
+        }
+      }
     });
+  });
 }
 
 function verify_token(token) {
-    return new Promise(function (resolve, reject) {
-        // 1.从Token里拿用户和签名
-        // 2.对用户名+盐进行MD5计算签名
-        // 3.签名比对
-        if (token == undefined) {
-            reject('invalid token');
-            return;
-        }
+  return new Promise(function (resolve, reject) {
+    // 1.从Token里拿用户和签名
+    // 2.对用户名+盐进行MD5计算签名
+    // 3.签名比对
+    if (token == undefined) {
+      reject('invalid token');
+      return;
+    }
 
-        let userAndSignature = token.split('-');
-        if (userAndSignature.length == 2) {
-            let user = userAndSignature[0];
-            let verify = userAndSignature[1];
+    let userAndSignature = token.split('-');
+    if (userAndSignature.length == 2) {
+      let user = userAndSignature[0];
+      let verify = userAndSignature[1];
 
-            if (verify == Crypto.createHash('md5').update(user + 'LIFE').digest('hex')) {
-                    resolve(user);
-            } else {
-                reject('invalid token');
-            }
-        } else {
-            reject('invalid token');
-        }
-    });
+      if (verify == Crypto.createHash('md5').update(user + 'LIFE').digest('hex')) {
+        resolve(user);
+      } else {
+        reject('invalid token');
+      }
+    } else {
+      reject('invalid token');
+    }
+  });
 }

@@ -1,0 +1,33 @@
+{
+  "name": "life",
+  "description": "keep words in memory",
+  "main": "main.js",
+  "authors": [
+    "shaolinzheng"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "memory",
+    "learning"
+  ],
+  "homepage": "https://github.com/cloverzero/life",
+  "moduleType": [
+    "globals"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "angular": "^1.5.0",
+    "angular-bootstrap": "^1.1.2",
+    "angular-route": "^1.5.0",
+    "angular-touch": "^1.5.0",
+    "angular-resource": "^1.5.0",
+    "moment": "^2.11.2"
+  }
+}
