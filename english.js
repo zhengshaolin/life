@@ -42,11 +42,12 @@ function insert_word(word) {
   });
 }
 
+exports.insertPhrase = insertPhrase;
 function insertPhrase(phrase) {
   return new Promise(function (resolve, reject) {
     db.collection('phrases').insertOne(phrase, function (err, result) {
       if (!err) {
-        resolve(result);
+        resolve(phrase);
       } else {
         reject('insert phrase failed, caused by: ' + err);
       }
@@ -54,6 +55,7 @@ function insertPhrase(phrase) {
   })
 }
 
+exports.findPhrasesByWord = findPhrasesByWord;
 function findPhrasesByWord(word, user) {
   return new Promise(function (resolve, reject) {
     db.collection('phrases').find({word: word, user: user}).toArray(function (err, result) {
@@ -205,6 +207,8 @@ function update_words(user, date, words) {
 
 exports.update_words = update_words;
 
+
+exports.updateWord = update_word;
 function update_word(word) {
   return new Promise(function (resolve, reject) {
     let id = word._id;

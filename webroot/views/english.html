@@ -3,9 +3,9 @@
 <form class="form-inline">
   <div class="form-group">
     <label for="newWord">New words</label>
-    <input type="text" id="newWord" class="form-control" placeholder="put new words here"/>
+    <input type="text" id="newWord" class="form-control" ng-model="newWords" placeholder="put new words here"/>
   </div>
-  <button type="submit" class="btn btn-primary">
+  <button type="submit" class="btn btn-primary" ng-click="addWords()">
     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
   </button>
 </form>
@@ -18,9 +18,9 @@
       <label class="control-label col-sm-2">{{phrase}}</label>
       <div class="col-sm-10">
         <div class="input-group">
-          <input type="text" class="form-control"/>
+          <input type="text" class="form-control" ng-model="word.phrases[id]" ng-change="save(word)"/>
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button">
+            <button class="btn btn-default" type="button" ng-click="save(word)">
               <span class="glyphicon glyphicon-save-file"></span>
             </button>
           </span>
@@ -31,9 +31,9 @@
       <label class="control-label col-sm-2">New Phrase</label>
       <div class="col-sm-10">
         <div class="input-group">
-          <input type="text" class="form-control"/>
+          <input type="text" class="form-control" ng-model="newPhrase[word.word]"/>
           <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">
+            <button class="btn btn-primary" type="button" ng-click="addPhrase(word.word)">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
           </span>
@@ -42,16 +42,17 @@
     </dd>
   </dl>
   <hr/>
+
   <h4>REVISE</h4>
   <dl ng-repeat="word in content.revise">
     <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}}</dt>
-    <dd ng-repeat="phrase in content.phrases[word.word]" class="form-group">
+    <dd ng-repeat="(id, phrase) in content.phrases[word.word]" class="form-group">
       <label class="control-label col-sm-2">{{phrase}}</label>
       <div class="col-sm-10">
         <div class="input-group">
-          <input type="text" class="form-control"/>
+          <input type="text" class="form-control" ng-model="word.phrases[id]" ng-change="save(word)"/>
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button">
+            <button class="btn btn-default" type="button" ng-click="save(word)">
               <span class="glyphicon glyphicon-save-file"></span>
             </button>
           </span>
@@ -62,9 +63,9 @@
       <label class="control-label col-sm-2">New Phrase</label>
       <div class="col-sm-10">
         <div class="input-group">
-          <input type="text" class="form-control"/>
+          <input type="text" class="form-control" ng-model="newPhrase[word.word]"/>
           <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">
+            <button class="btn btn-primary" type="button" ng-click="addPhrase(word.word)">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
           </span>
