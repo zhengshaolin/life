@@ -14,7 +14,7 @@
   <h4>NEW</h4>
   <dl ng-repeat="word in content.first">
     <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}}</dt>
-    <dd ng-repeat="phrase in content.phrases[word.word]" class="form-group">
+    <dd ng-repeat="(id, phrase) in content.phrases[word.word]" class="form-group">
       <label class="control-label col-sm-2">{{phrase}}</label>
       <div class="col-sm-10">
         <div class="input-group">
