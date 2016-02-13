@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('life', ['ngRoute', 'ngResource'])
+angular.module('life', ['ngRoute', 'ngResource', 'ui.bootstrap'])
     .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
         when('/schedule/:date', {
