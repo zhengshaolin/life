@@ -73,3 +73,8 @@
     font-style: italic;
     color: #999;
 }
+
+
+.word-list dd {
+  margin-left: 2em;
+}

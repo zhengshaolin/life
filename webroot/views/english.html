@@ -1,4 +1,4 @@
-<h3>今天的单词表</h3>
+<h3>Today</h3>
 
 <form class="form-inline">
   <div class="form-group">
@@ -10,68 +10,50 @@
   </button>
 </form>
 <hr/>
-<form class="form-horizontal">
+<form name="englishForm" novalidate>
   <h4>NEW</h4>
-  <dl ng-repeat="word in content.first">
-    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}}</dt>
-    <dd ng-repeat="(id, phrase) in content.phrases[word.word]" class="form-group">
-      <label class="control-label col-sm-2">{{phrase}}</label>
-      <div class="col-sm-10">
-        <div class="input-group">
-          <input type="text" class="form-control" ng-model="word.phrases[id]" ng-change="save(word)"/>
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" ng-click="save(word)">
-              <span class="glyphicon glyphicon-save-file"></span>
-            </button>
-          </span>
-        </div>
-      </div>
-    </dd>
-    <dd class="form-group">
-      <label class="control-label col-sm-2">New Phrase</label>
-      <div class="col-sm-10">
-        <div class="input-group">
-          <input type="text" class="form-control" ng-model="newPhrase[word.word]"/>
-          <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" ng-click="addPhrase(word.word)">
-              <span class="glyphicon glyphicon-plus"></span>
-            </button>
-          </span>
-        </div>
+  <dl ng-repeat="word in content.first" class="word-list">
+    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}} <button type="button" class="btn btn-info btn-xs" ng-click="openPhraseDialog(word)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Phrase</button> </dt>
+    <dd ng-repeat="(id, phrase) in content.phrases[word.word]">
+      <div class="form-group" ng-class="{'has-warning': englishForm[word._id + id].$dirty, 'has-success': !englishForm[word._id + id].$dirty && !englishForm[word._id + id].$pristine}">
+        <label>{{phrase}}</label>
+        <input type="text" name="{{word._id + id}}" class="form-control" ng-model="word.phrases[id]" ng-blur="save(word, id)" />
       </div>
     </dd>
   </dl>
   <hr/>
 
   <h4>REVISE</h4>
-  <dl ng-repeat="word in content.revise">
-    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}}</dt>
-    <dd ng-repeat="(id, phrase) in content.phrases[word.word]" class="form-group">
-      <label class="control-label col-sm-2">{{phrase}}</label>
-      <div class="col-sm-10">
-        <div class="input-group">
-          <input type="text" class="form-control" ng-model="word.phrases[id]" ng-change="save(word)"/>
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" ng-click="save(word)">
-              <span class="glyphicon glyphicon-save-file"></span>
-            </button>
-          </span>
-        </div>
-      </div>
-    </dd>
-    <dd class="form-group">
-      <label class="control-label col-sm-2">New Phrase</label>
-      <div class="col-sm-10">
-        <div class="input-group">
-          <input type="text" class="form-control" ng-model="newPhrase[word.word]"/>
-          <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" ng-click="addPhrase(word.word)">
-              <span class="glyphicon glyphicon-plus"></span>
-            </button>
-          </span>
-        </div>
+  <dl ng-repeat="word in content.revise" class="word-list">
+    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}}  <button type="button" class="btn btn-info btn-xs" ng-click="openPhraseDialog(word)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Phrase</button> </dt>
+    <dd ng-repeat="(id, phrase) in content.phrases[word.word]">
+      <div class="form-group" ng-class="{'has-warning': englishForm[word._id + id].$dirty, 'has-success': !englishForm[word._id + id].$dirty && !englishForm[word._id + id].$pristine}">
+        <label>{{phrase}}</label>
+        <input type="text" name="{{word._id + id}}" class="form-control" ng-model="word.phrases[id]" ng-blur="save(word, id)" />
       </div>
     </dd>
   </dl>
 </form>
+
+<script type="text/ng-template" id="phrase_dialog.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Add Phrase</h3>
+  </div>
+  <div class="modal-body">
+    <form name="phraseForm" novalidate>
+      <div class="form-group">
+        <label>Word</label>
+        <input class="form-control" readonly ng-model="word.word" />
+      </div>
+      <div class="form-group">
+        <label>Phrase</label>
+        <input class="form-control" ng-model="newPhrase" required />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="phraseForm.$invalid">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+  </div>
+</script>
 
