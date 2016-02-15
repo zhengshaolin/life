@@ -54,6 +54,20 @@ function insertPhrase(phrase) {
     })
   })
 }
+exports.updatePhrase = updatePhrase;
+function updatePhrase(phrase) {
+  return new Promise(function (resolve, reject) {
+    let id = phrase._id;
+    delete phrase._id;
+    db.collection('phrases').updateOne({_id: ObjectID(id)}, {$set: phrase}, function (err, result) {
+      if (err) {
+        reject('update phrases failed, caused by: ' + err.toString());
+      } else {
+        resolve(result);
+      }
+    });
+  })
+}
 
 exports.findPhrasesByWord = findPhrasesByWord;
 function findPhrasesByWord(word, user) {

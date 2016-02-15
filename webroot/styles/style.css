@@ -64,15 +64,6 @@
 .schedule_show .label {
     font-weight: bold;
 }
-.words .date {
-    float: left;
-    border: 1px solid #CCC;
-    margin: 10px;
-}
-.words input {
-    font-style: italic;
-    color: #999;
-}
 
 
 .word-list dd {
