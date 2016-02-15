@@ -1,13 +1,12 @@
-angular.module('life').controller('PhraseDialogCtrl', function ($scope, $uibModalInstance, word) {
+angular.module('life').controller('PhraseDialogCtrl', function ($scope, $uibModalInstance, word, phrase) {
 
   $scope.word = word;
+  $scope.phrase = phrase || {};
 
 
   $scope.ok = function () {
-    $uibModalInstance.close({
-      word: $scope.word.word,
-      phrase: $scope.newPhrase
-    });
+    $scope.phrase.word = word.word;
+    $uibModalInstance.close($scope.phrase);
   };
 
   $scope.cancel = function () {

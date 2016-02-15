@@ -82,8 +82,11 @@ database.open(function (err, mongo) {
 
 var Express = require('express');
 var BodyParser = require('body-parser');
+var CookieParser = require('cookie-parser');
 
 var app = Express();
+
+app.use(CookieParser());
 
 // 配置BODY数据解析器
 app.use(BodyParser.json());
@@ -97,6 +100,7 @@ app.use('/', phraseRouter);
 // 登录
 app.get('/token', function (req, res) {
   get_user(req.query.username, req.query.password).then(function (user) {
+    res.cookie('username', user.username, {maxAge: 5 * 24 * 3600 * 1000});
     let signature = Crypto.createHash('md5').update(user.username + 'LIFE').digest('hex');
     return user.username + '-' + signature;
   }).then(function (token) {

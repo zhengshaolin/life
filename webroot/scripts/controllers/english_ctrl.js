@@ -16,11 +16,8 @@ angular.module('life').controller('EnglishController', function ($scope, $route,
   $scope.date = today.format('YYYY-MM-DD');
   $scope.newPhrase = {};
 
-  function addPhrase(word, phraseString) {
-    var phrase = new Phrase({
-      phrase: phraseString,
-      word: word
-    });
+  function addPhrase(p) {
+    var phrase = new Phrase(p);
     phrase.$save().then(function (res) {
       $route.reload();
     });
@@ -63,12 +60,12 @@ angular.module('life').controller('EnglishController', function ($scope, $route,
       headers: {token: $scope.token}
     }).then(function () {
       console.log('save success');
-      $scope.englishForm[word._id + phraseId].$dirty = false;
+      $scope.englishForm.$setPristine();
     });
 
   };
 
-  $scope.openPhraseDialog = function (word) {
+  $scope.openPhraseDialog = function (word, phrase) {
 
     var modalInstance = $uibModal.open({
       templateUrl: 'phrase_dialog.html',
@@ -76,12 +73,15 @@ angular.module('life').controller('EnglishController', function ($scope, $route,
       resolve: {
         word: function () {
           return word;
+        },
+        phrase: function () {
+          return phrase;
         }
       }
     });
 
-    modalInstance.result.then(function (result) {
-      addPhrase(result.word, result.phrase);
+    modalInstance.result.then(function (phrase) {
+      addPhrase(phrase);
     });
   };
 });

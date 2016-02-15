@@ -13,11 +13,22 @@
 <form name="englishForm" novalidate>
   <h4>NEW</h4>
   <dl ng-repeat="word in content.first" class="word-list">
-    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}} <button type="button" class="btn btn-info btn-xs" ng-click="openPhraseDialog(word)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Phrase</button> </dt>
+    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}} <button type="button" class="btn btn-info btn-xs" ng-click="openPhraseDialog(word)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Phrase</button></dt>
     <dd ng-repeat="(id, phrase) in content.phrases[word.word]">
-      <div class="form-group" ng-class="{'has-warning': englishForm[word._id + id].$dirty, 'has-success': !englishForm[word._id + id].$dirty && !englishForm[word._id + id].$pristine}">
-        <label>{{phrase}}</label>
-        <input type="text" name="{{word._id + id}}" class="form-control" ng-model="word.phrases[id]" ng-blur="save(word, id)" />
+      <div class="form-group has-feedback" ng-class="{'has-warning': englishForm['_' + word._id + id].$dirty}">
+        <label>{{phrase}}
+          <span uib-dropdown on-toggle="toggled(open)">
+            <a href uib-dropdown-toggle>
+              <span class="caret"></span>
+            </a>
+            <ul uib-dropdown-menu aria-labelledby="simple-dropdown">
+              <li><a href ng-click="openPhraseDialog(word, {_id: id, phrase: phrase})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a></li>
+              <!--<li><a href>Delete</a></li>-->
+            </ul>
+          </span>
+        </label>
+        <input type="text" name="{{'_' + word._id + id}}" class="form-control" ng-model="word.phrases[id]" ng-blur="save(word, id)" />
+        <span ng-if="englishForm['_' + word._id + id].$dirty" class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
       </div>
     </dd>
   </dl>
@@ -25,11 +36,22 @@
 
   <h4>REVISE</h4>
   <dl ng-repeat="word in content.revise" class="word-list">
-    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}}  <button type="button" class="btn btn-info btn-xs" ng-click="openPhraseDialog(word)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Phrase</button> </dt>
+    <dt><span class="glyphicon glyphicon-bookmark"></span> {{word.word}} <button type="button" class="btn btn-info btn-xs" ng-click="openPhraseDialog(word)"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Phrase</button></dt>
     <dd ng-repeat="(id, phrase) in content.phrases[word.word]">
-      <div class="form-group" ng-class="{'has-warning': englishForm[word._id + id].$dirty, 'has-success': !englishForm[word._id + id].$dirty && !englishForm[word._id + id].$pristine}">
-        <label>{{phrase}}</label>
-        <input type="text" name="{{word._id + id}}" class="form-control" ng-model="word.phrases[id]" ng-blur="save(word, id)" />
+      <div class="form-group has-feedback" ng-class="{'has-warning': englishForm['_' + word._id + id].$dirty}">
+        <label>{{phrase}}
+          <span uib-dropdown on-toggle="toggled(open)">
+            <a href uib-dropdown-toggle>
+              <span class="caret"></span>
+            </a>
+            <ul uib-dropdown-menu aria-labelledby="simple-dropdown">
+              <li><a href ng-click="openPhraseDialog(word, {_id: id, phrase: phrase})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a></li>
+              <!--<li><a href>Delete</a></li>-->
+            </ul>
+          </span>
+        </label>
+        <input type="text" name="{{'_' + word._id + id}}" class="form-control" ng-model="word.phrases[id]" ng-blur="save(word, id)" />
+        <span ng-if="englishForm['_' + word._id + id].$dirty" class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
       </div>
     </dd>
   </dl>
@@ -47,7 +69,7 @@
       </div>
       <div class="form-group">
         <label>Phrase</label>
-        <input class="form-control" ng-model="newPhrase" required />
+        <input class="form-control" ng-model="phrase.phrase" required />
       </div>
     </form>
   </div>
