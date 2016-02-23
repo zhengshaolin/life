@@ -97,6 +97,18 @@ app.use('/public', Express.static('dist/'));
 
 app.use('/', phraseRouter);
 
+app.use(function (req, res, next) {
+  if (!req.cookies.username) {
+    if ('/token'.startsWith(req.path)) {
+      next();
+    } else {
+      res.status(401).end();
+    }
+  } else {
+    next();
+  }
+});
+
 // 登录
 app.get('/token', function (req, res) {
   get_user(req.query.username, req.query.password).then(function (user) {

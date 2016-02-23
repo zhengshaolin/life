@@ -10,7 +10,9 @@ angular.module('life').controller('EnglishController', function ($scope, $route,
   if ($routeParams.date) {
     today = moment($routeParams.date);
   } else {
-    today = moment();
+    var now = new Date().getTime();
+    now = now - (3600 * 3 * 1000);
+    today = moment(now);
   }
 
   $scope.date = today.format('YYYY-MM-DD');
