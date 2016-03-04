@@ -8,14 +8,14 @@ angular.module('life').controller('EnglishController', function ($scope, $route,
 
   var today;
   if ($routeParams.date) {
-    today = moment($routeParams.date);
+    today = $routeParams.date;
   } else {
     var now = new Date().getTime();
     now = now - (3600 * 3 * 1000);
-    today = moment(now);
+    today = moment(now).format('YYYY-MM-DD');
   }
 
-  $scope.date = today.format('YYYY-MM-DD');
+  $scope.date = today;
   $scope.newPhrase = {};
 
   function addPhrase(p) {
