@@ -99,7 +99,7 @@ app.use('/', phraseRouter);
 
 app.use(function (req, res, next) {
   if (!req.cookies.username) {
-    if ('/token'.startsWith(req.path)) {
+    if ('/token'.startsWith(req.path) || req.path == '/favicon.ico') {
       next();
     } else {
       res.status(401).end();
@@ -112,7 +112,7 @@ app.use(function (req, res, next) {
 // 登录
 app.get('/token', function (req, res) {
   get_user(req.query.username, req.query.password).then(function (user) {
-    res.cookie('username', user.username, {maxAge: 5 * 24 * 3600 * 1000});
+    res.cookie('username', user.username, {maxAge: 365 * 24 * 3600 * 1000});
     let signature = Crypto.createHash('md5').update(user.username + 'LIFE').digest('hex');
     return user.username + '-' + signature;
   }).then(function (token) {
