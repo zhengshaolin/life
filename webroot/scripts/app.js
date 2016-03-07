@@ -14,6 +14,9 @@ angular.module('life', ['ngRoute', 'ngResource', 'ui.bootstrap'])
     }).when('/plan/weekly', {
       controller: 'WeeklyPlanController',
       templateUrl: 'views/weekly_plan.html'
+    }).when('/english', {
+      controller: 'EnglishController',
+      templateUrl: 'views/english.html'
     }).when('/english/:date', {
       controller: 'EnglishController',
       templateUrl: 'views/english.html'
