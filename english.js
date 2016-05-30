@@ -84,6 +84,7 @@ function findPhrasesByWord(word, user) {
 
 function add_word(user, date, word) {
   let first = new Date(date);
+  let interval = 14 * 24 * 3600 * 1000; // Based on the book 词行天下, we are going to use equivalent interval
   let word1 = {
     user: user,
     word: word,
@@ -95,7 +96,7 @@ function add_word(user, date, word) {
   let word2 = {
     user: user,
     word: word,
-    date: moment(first.getTime() + 24 * 3600 * 1000).format('YYYY-MM-DD'),
+    date: moment(first.getTime() + interval).format('YYYY-MM-DD'),
     memory: 2,
     example: '',
     completion: false
@@ -103,7 +104,7 @@ function add_word(user, date, word) {
   let word3 = {
     user: user,
     word: word,
-    date: moment(first.getTime() + 3 * 24 * 3600 * 1000).format('YYYY-MM-DD'),
+    date: moment(first.getTime() + 2 * interval).format('YYYY-MM-DD'),
     memory: 3,
     example: '',
     completion: false
@@ -111,7 +112,7 @@ function add_word(user, date, word) {
   let word4 = {
     user: user,
     word: word,
-    date: moment(first.getTime() + 6 * 24 * 3600 * 1000).format('YYYY-MM-DD'),
+    date: moment(first.getTime() + 3 * interval).format('YYYY-MM-DD'),
     memory: 4,
     example: '',
     completion: false
@@ -119,7 +120,7 @@ function add_word(user, date, word) {
   let word5 = {
     user: user,
     word: word,
-    date: moment(first.getTime() + 14 * 24 * 3600 * 1000).format('YYYY-MM-DD'),
+    date: moment(first.getTime() + 4 * interval).format('YYYY-MM-DD'),
     memory: 5,
     example: '',
     completion: false
@@ -127,7 +128,7 @@ function add_word(user, date, word) {
   let word6 = {
     user: user,
     word: word,
-    date: moment(first.getTime() + 29 * 24 * 3600 * 1000).format('YYYY-MM-DD'),
+    date: moment(first.getTime() + 5 * interval).format('YYYY-MM-DD'),
     memory: 6,
     example: '',
     completion: false
@@ -135,7 +136,7 @@ function add_word(user, date, word) {
   let word7 = {
     user: user,
     word: word,
-    date: moment(first.getTime() + 59 * 24 * 3600 * 1000).format('YYYY-MM-DD'),
+    date: moment(first.getTime() + 6 * interval).format('YYYY-MM-DD'),
     memory: 7,
     example: '',
     completion: false
