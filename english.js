@@ -74,9 +74,11 @@ function findPhrasesByWord(word, user) {
   return new Promise(function (resolve, reject) {
     db.collection('phrases').find({word: word, user: user}).toArray(function (err, result) {
       if (!err) {
-        result = result.map(function (phrase) {
-          if (phrase.phrase != '[DELETED]') {
-            return phrase;
+        result = result.filter(function (phrase) {
+          if (phrase.phrase == '[DELETED]') {
+            return false;
+          } else {
+            return true;
           }
         });
         resolve(result);
