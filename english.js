@@ -74,6 +74,11 @@ function findPhrasesByWord(word, user) {
   return new Promise(function (resolve, reject) {
     db.collection('phrases').find({word: word, user: user}).toArray(function (err, result) {
       if (!err) {
+        result = result.map(function (phrase) {
+          if (phrase.phrase != '[DELETED]') {
+            return phrase;
+          }
+        });
         resolve(result);
       } else {
         reject('find phrases failed, caused by: ' + err + ", input:" + word + ", " + user);
