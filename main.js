@@ -66,7 +66,7 @@ var English = require('./english.js');
 
 var phraseRouter = require('./routes/phrase');
 
-var server = new Mongodb.Server('127.0.0.1', 27017, {auto_reconnect: true});
+var server = new Mongodb.Server('mongo', 27017, {auto_reconnect: true});
 var database = new Mongodb.Db('life', server, {safe: true});
 var db;
 database.open(function (err, mongo) {
