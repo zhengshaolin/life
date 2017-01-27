@@ -98,8 +98,14 @@ app.use('/public', Express.static('dist/'));
 app.use('/', phraseRouter);
 
 app.use(function (req, res, next) {
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set("Access-Control-Allow-Headers", "*");
+  if (req.method == 'OPTIONS') {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "*");
+    res.set("Access-Control-Allow-Headers", "*");
+    res.status(200).end();
+    return;
+  }
+
   if (!req.cookies.username) {
     if ('/token'.startsWith(req.path) || req.path == '/favicon.ico') {
       next();
