@@ -107,21 +107,27 @@ app.use(function (req, res, next) {
     return;
   }
 
-  if (!req.cookies.username) {
-    if ('/token'.startsWith(req.path) || req.path == '/favicon.ico') {
-      next();
-    } else {
-      res.status(401).end();
-    }
-  } else {
+  if (req.path.startsWith('/token')) {
     next();
+    return;
   }
+
+  if (reqreq.path == '/favicon.ico') {
+    next();
+    return;
+  }
+
+  if ("token" in req.headers) {
+    next();
+    return;
+  }
+
+  res.status(401).end();
 });
 
 // 登录
 app.get('/token', function (req, res) {
   get_user(req.query.username, req.query.password).then(function (user) {
-    res.cookie('username', user.username, {maxAge: 365 * 24 * 3600 * 1000});
     let signature = Crypto.createHash('md5').update(user.username + 'LIFE').digest('hex');
     return user.username + '-' + signature;
   }).then(function (token) {
