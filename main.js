@@ -100,7 +100,7 @@ app.use('/', phraseRouter);
 app.use(function (req, res, next) {
   res.set("Access-Control-Allow-Origin", "*");
   res.set("Access-Control-Allow-Methods", "*");
-  res.set("Access-Control-Allow-Headers", "token");
+  res.set("Access-Control-Allow-Headers", "token,Content-Type");
 
   if (req.method == 'OPTIONS') {
     res.status(200).end();
