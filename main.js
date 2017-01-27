@@ -101,7 +101,7 @@ app.use(function (req, res, next) {
   if (req.method == 'OPTIONS') {
     res.set("Access-Control-Allow-Origin", "*");
     res.set("Access-Control-Allow-Methods", "*");
-    res.set("Access-Control-Allow-Headers", "*");
+    res.set("Access-Control-Allow-Headers", "token");
     res.status(200).end();
     return;
   }
