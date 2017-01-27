@@ -59,6 +59,8 @@ var Crypto = require('crypto');
 var Mongodb = require('mongodb');
 var ObjectID = require('mongodb').ObjectID;
 
+var moment = require('moment');
+
 //var Qrcode = require('qrcode');
 
 var Life = require('./life.js');
@@ -320,7 +322,7 @@ app.post('/words/:date', function (req, res) {
 // 查某日单词
 app.get('/words/:date', function (req, res) {
   let token = req.headers.token;
-  let date = req.params.date;
+  let date = moment(new Date(req.params.date)).format('YYYY-MM-DD');
 
   verify_token(token).then(function (user) {
     return English.list_words(user, date);
