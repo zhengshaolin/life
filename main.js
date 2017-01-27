@@ -112,7 +112,7 @@ app.use(function (req, res, next) {
     return;
   }
 
-  if (reqreq.path == '/favicon.ico') {
+  if (req.path == '/favicon.ico') {
     next();
     return;
   }
