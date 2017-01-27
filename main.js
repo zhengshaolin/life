@@ -98,6 +98,7 @@ app.use('/public', Express.static('dist/'));
 app.use('/', phraseRouter);
 
 app.use(function (req, res, next) {
+  res.set("Access-Control-Allow-Origin", "*");
   if (!req.cookies.username) {
     if ('/token'.startsWith(req.path) || req.path == '/favicon.ico') {
       next();
